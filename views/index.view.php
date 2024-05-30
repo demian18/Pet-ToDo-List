@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="public/style.css" rel="stylesheet">
+    <link href="../public/style.css" rel="stylesheet">
     <title>Document</title>
 </head>
 <body class="h-full">
@@ -172,20 +172,22 @@
                 <div class="bg-white shadow-lg rounded-lg p-6">
                     <h2 class="text-xl font-semibold mb-4">To-Do List</h2>
                     <div class="border-t border-gray-200 mt-4">
-                        <!--<ul class="divide-y divide-gray-200">
-                            <li class="py-2 flex justify-between items-center">
-                                <span>Task 1</span>
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">
-                            </li>
-                            <li class="py-2 flex justify-between items-center">
-                                <span>Task 2</span>
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">
-                            </li>
-                            <li class="py-2 flex justify-between items-center">
-                                <span>Task 3</span>
-                                <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">
-                            </li>
-                        </ul>-->
+                        <ul class="divide-y divide-gray-200">
+                            <?php foreach ($tasks as $task) : ?>
+                                <li class="py-2 flex justify-between items-center">
+                                    <span><?= $task['title'] ?></span>
+                                    <!--<input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">-->
+                                </li>
+                            <?php endforeach; ?>
+                                <!--<li class="py-2 flex justify-between items-center">
+                                    <span>Task 2</span>
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">
+                                </li>
+                                <li class="py-2 flex justify-between items-center">
+                                    <span>Task 3</span>
+                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">
+                                </li>-->
+                        </ul>
                     </div>
                     <!--<div class="mt-4 flex">
                         <input type="text" placeholder="Add a new task" class="flex-1 px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
