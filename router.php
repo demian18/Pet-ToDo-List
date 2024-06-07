@@ -2,7 +2,8 @@
 $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 
 $routes = [
-    '/' => 'controllers/index.php'
+    '/' => 'controllers/index.php',
+    '/create-task' => 'controllers/create-task.php',
 ];
 
 function routeToControoler($uri, $routes)

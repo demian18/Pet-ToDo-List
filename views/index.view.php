@@ -179,16 +179,31 @@
                                     <!--<input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">-->
                                 </li>
                             <?php endforeach; ?>
-                                <!--<li class="py-2 flex justify-between items-center">
-                                    <span>Task 2</span>
-                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">
-                                </li>
-                                <li class="py-2 flex justify-between items-center">
-                                    <span>Task 3</span>
-                                    <input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">
-                                </li>-->
                         </ul>
                     </div>
+                    <div class="border-b border-gray-900/10 mt-6"></div>
+                    <form method="POST" action="/create-task">
+                        <div class="space-y-12">
+                            <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
+                                <div class="sm:col-span-4">
+                                    <label for="title"
+                                           class="block text-sm font-medium leading-6 text-gray-900">Add a task</label>
+                                    <div class="mt-2 flex items-center">
+                                        <input type="text" name="title" id="title" required
+                                               class="block w-full flex-grow rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                                        <button type="submit"
+                                                class="ml-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                            Save
+                                        </button>
+                                    </div>
+                                    <?php if(isset($errors['title'])) : ?>
+                                        <p class="text-red-500 text-xs mt-2"><?= $errors['title'] ?></p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
                     <!--<div class="mt-4 flex">
                         <input type="text" placeholder="Add a new task" class="flex-1 px-4 py-2 border rounded-l-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
                         <button class="bg-indigo-600 text-white px-4 py-2 rounded-r-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Add</button>
