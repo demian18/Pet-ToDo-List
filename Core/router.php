@@ -4,12 +4,13 @@ $uri = parse_url($_SERVER['REQUEST_URI'])['path'];
 $routes = [
     '/' => 'controllers/index.php',
     '/create-task' => 'controllers/create-task.php',
+    '/delete-task' => 'controllers/delete-task.php',
 ];
 
 function routeToControoler($uri, $routes)
 {
     if (array_key_exists($uri, $routes)){
-        require $routes[$uri];
+        require base_path($routes[$uri]);
     } else{
         abort();
     }

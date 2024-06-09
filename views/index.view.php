@@ -176,7 +176,11 @@
                             <?php foreach ($tasks as $task) : ?>
                                 <li class="py-2 flex justify-between items-center">
                                     <span><?= $task['title'] ?></span>
-                                    <!--<input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">-->
+                                    <form method="POST" action="/delete-task" class="inline">
+                                        <!--<input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">-->
+                                        <input type="hidden" name="id" value="<?= $task['id'] ?>">
+                                        <button type="submit" class="text-red-600 hover:text-red-800">Delete</button>
+                                    </form>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
@@ -196,7 +200,7 @@
                                             Save
                                         </button>
                                     </div>
-                                    <?php if(isset($errors['title'])) : ?>
+                                    <?php if (isset($errors['title'])) : ?>
                                         <p class="text-red-500 text-xs mt-2"><?= $errors['title'] ?></p>
                                     <?php endif; ?>
                                 </div>

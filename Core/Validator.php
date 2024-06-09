@@ -1,5 +1,5 @@
 <?php
-
+namespace Core;
 class Validator
 {
     public static function string($string, $min = 5, $max = INF)

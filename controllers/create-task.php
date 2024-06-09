@@ -1,12 +1,12 @@
 <?php
-
-require base_path('Validator.php');
+Use Core\Database;
+Use Core\Validator;
 
 $config = require base_path('config.php');
 $db = new Database($config['database']);
 
+$errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $errors = [];
 
     if (!Validator::string($_POST['title'], 5, 25)) {
         $errors['title'] = 'Title must be between 5 and 25 characters!';
