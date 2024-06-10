@@ -178,6 +178,7 @@
                                     <span><?= $task['title'] ?></span>
                                     <form method="POST" action="/delete-task" class="inline">
                                         <!--<input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">-->
+                                        <input type="hidden" name="_method" value="DELETE">
                                         <input type="hidden" name="id" value="<?= $task['id'] ?>">
                                         <button type="submit" class="text-red-600 hover:text-red-800">Delete</button>
                                     </form>
