@@ -1,16 +1,15 @@
 <?php
+
+use Core\App;
 use Core\Database;
 
-$config = require base_path('config.php');
-$db = new Database($config['database']);
+$db = App::resolve(Database::class);
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
-    $id = $_POST['id'];
+$id = $_POST['id'];
 
-    $db->query('DELETE FROM todo WHERE id = :id', [
-        'id' => $id
-    ]);
+$db->query('DELETE FROM todo WHERE id = :id', [
+    'id' => $id
+]);
 
-    header('Location: /');
-    exit();
-}
+header('Location: /');
+exit();
