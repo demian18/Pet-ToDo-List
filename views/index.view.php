@@ -1,8 +1,8 @@
-<?php require ('partials/head.php') ?>
+<?php require('partials/head.php') ?>
 
-<?php require ('partials/nav.php') ?>
+<?php require('partials/nav.php') ?>
 
-<?php require ('partials/banner.php') ?>
+<?php require('partials/banner.php') ?>
 
     <main>
         <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
@@ -15,7 +15,9 @@
                             <?php if (isset($tasks)): ?>
                                 <?php foreach ($tasks as $task) : ?>
                                     <li class="py-2 flex justify-between items-center">
-                                        <span><?= $task['title'] ?></span>
+                                        <a href="/edit-task?id=<?= $task['id'] ?>">
+                                            <span><?= htmlspecialchars($task['title']) ?></span>
+                                        </a>
                                         <form method="POST" action="/delete-task" class="inline">
                                             <!--<input type="checkbox" class="form-checkbox h-5 w-5 text-indigo-600">-->
                                             <input type="hidden" name="_method" value="DELETE">
@@ -46,7 +48,7 @@
                                         </button>
                                     </div>
                                     <?php if (isset($errors['title'])) : ?>
-                                        <p class="text-red-500 text-xs mt-2"><?= $errors['title'] ?></p>
+                                        <p class="text-red-500 text-xs mt-2"><?= htmlspecialchars($errors['title']) ?></p>
                                     <?php endif; ?>
                                 </div>
                             </div>
@@ -62,4 +64,4 @@
 
         </div>
     </main>
-<?php require ('partials/footer.php');
+<?php require('partials/footer.php');
