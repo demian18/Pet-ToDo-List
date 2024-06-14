@@ -9,7 +9,7 @@ if (isset($_GET['errors'])) {
 
 $db = App::resolve(Database::class);
 
-$tasks = $db->query('select * from todo where user_id = 1')->fetchAll(PDO::FETCH_ASSOC);
+$tasks = $db->query('select * from todo where user_id = 1')->get();
 view("index.view.php", [
     'errors' => $errors,
     'tasks' => $tasks
