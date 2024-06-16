@@ -9,6 +9,11 @@ function dd($value)
     die();
 }
 
+function urlIs($value)
+{
+    return $_SERVER['REQUEST_URI'] === $value;
+}
+
 function base_path($path)
 {
     return BASE_PATH . $path;
@@ -27,4 +32,22 @@ function abort($code = 404)
     require base_path("views/{$code}.php");
 
     die();
+}
+
+function login($user)
+{
+    $_SESSION['user'] = [
+        'email' => $user['user']
+    ];
+
+    session_regenerate_id(true);
+}
+
+function logout()
+{
+    $_SESSION = [];
+    session_destroy();
+
+    $params = session_get_cookie_params();
+    setcookie('PHPSESSID', '', time() - 3600, $params['path'], $params['domain']);
 }

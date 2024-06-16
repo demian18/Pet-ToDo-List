@@ -37,8 +37,8 @@
 
                     <!-- Profile dropdown -->
                     <div class="relative ml-3">
-                        <?php if ($_SESSION['user'] ?? false) : ?>
-                            <div>
+                        <div>
+                            <?php if ($_SESSION['user'] ?? false) : ?>
                                 <button type="button"
                                         class="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
                                         id="user-menu-button" aria-expanded="false" aria-haspopup="true">
@@ -48,10 +48,14 @@
                                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                                          alt="">
                                 </button>
-                            </div>
-                        <?php else : ?>
-                            <a href="/register" class="text-white">Register</a>
-                        <?php endif; ?>
+                            <?php else : ?>
+                                <a href="/register"
+                                   class="<?= urlIs('/register') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Register</a>
+                                <a href="/login"
+                                   class="<?= urlIs('/login') ? 'bg-gray-900 text-white' : 'text-gray-300' ?> hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Log
+                                    In</a>
+                            <?php endif; ?>
+                        </div>
 
                         <!--
                           Dropdown menu, show/hide based on menu state.
@@ -75,6 +79,14 @@
                                id="user-menu-item-2">Sign out</a>
                         </div>-->
                     </div>
+                    <?php if ($_SESSION['user'] ?? false) : ?>
+                        <div class="relative ml-3">
+                            <form method="POST" action="/session">
+                                <input type="hidden" name="_method" value="DELETE">
+                                <button class="text-white">Log Out</button>
+                            </form>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="-mr-2 flex md:hidden">
