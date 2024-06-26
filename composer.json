@@ -1,0 +1,10 @@
+{
+  "name": "yaros/to-do-list",
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Core\\": "Core/",
+      "Http\\": "Http/"
+    }
+  }
+}
