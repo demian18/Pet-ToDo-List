@@ -2,7 +2,6 @@
 
 <?php require base_path('views/partials/nav.php') ?>
 
-<?php require base_path('views/partials/banner.php') ?>
     <main>
         <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
             <div class="sm:mx-auto sm:w-full sm:max-w-sm">
