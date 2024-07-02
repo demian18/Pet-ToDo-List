@@ -1,27 +1,21 @@
 <?php
 
-use Core\App;
-use Core\Database;
-use Core\Validator;
+use Core\TaskRepository;
+use Http\Forms\TaskForm;
 
-$db = App::resolve(Database::class);
+$form = new TaskForm($_POST);
 
-$errors = [];
-
-
-if (!Validator::string($_POST['title'], 5, 25)) {
-    $errors['title'] = 'Title must be between 5 and 25 characters!';
-}
-
-if (!empty($errors)) {
-    $errorParams = http_build_query(['errors' => json_encode($errors)]);
+if (!$form->validate()) {
+    $errorParams = http_build_query(['errors' => json_encode($form->errors())]);
     header("Location: /?$errorParams");
     exit();
 }
 
-$db->query('INSERT INTO todo (title, user_id) VALUES (:title, :user_id)', [
-    'title' => $_POST['title'],
-    'user_id' => 1,
+$taskRepository = new TaskRepository();
+$taskRepository->createTask([
+    'title' => $form->get('title'),
+    'user_id' => 1
 ]);
+
 header('Location: /');
 exit();
