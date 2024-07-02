@@ -1,30 +1,21 @@
 <?php
 
-use Core\App;
-use Core\Database;
-use Core\Validator;
+use Core\TaskRepository;
+use Http\Forms\TaskForm;
 
-$db = App::resolve(Database::class);
+$taskRepository = new TaskRepository();
 
-$task = $db->query('select * from todo where id = :id', [
-    'id' => $_POST['id']
-])->find();
+$id = $_POST['id'];
+$task = $taskRepository->editTask($id);
 
-$errors = [];
-
-if (!Validator::string($_POST['title'], 5, 25)) {
-    $errors['title'] = 'Title must be between 5 and 25 characters!';
-}
-
-if (count($errors)) {
+$form = new TaskForm($_POST);
+if (!$form->validate()){
     return view("edit.view.php", [
-        'errors' => $errors,
+        'errors' => $form->errors(),
         'task' => $task
     ]);
 }
-$db->query('update todo set title = :title where id = :id', [
-    'id' => $_POST['id'],
-    'title' => $_POST['title'],
-]);
+$taskRepository->updateTask($_POST);
+
 header('Location: /');
 exit();

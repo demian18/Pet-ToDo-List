@@ -1,13 +1,12 @@
 <?php
 
-use Core\App;
-use Core\Database;
+use Core\TaskRepository;
 
-$db = App::resolve(Database::class);
+$id = $_GET['id'];
 
-$task = $db->query('select * from todo where id = :id', [
-    'id' => $_GET['id']
-])->findOrFail();
+$taskRepository = new TaskRepository();
+
+$task = $taskRepository->editTask((int)$id);
 
 view("edit.view.php", [
     'task' => $task

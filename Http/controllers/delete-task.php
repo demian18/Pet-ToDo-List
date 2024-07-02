@@ -1,15 +1,11 @@
 <?php
 
-use Core\App;
-use Core\Database;
-
-$db = App::resolve(Database::class);
+use Core\TaskRepository;
 
 $id = $_POST['id'];
 
-$db->query('DELETE FROM todo WHERE id = :id', [
-    'id' => $id
-]);
+$taskRepository = new TaskRepository();
+$taskRepository->deleteTask((int)$id);
 
 header('Location: /');
 exit();
