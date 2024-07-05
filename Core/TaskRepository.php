@@ -6,22 +6,23 @@ class TaskRepository
 {
     public function createTask($data)
     {
-        App::resolve(Database::class)->query('INSERT INTO todo (title, user_id) VALUES (:title, :user_id)', [
+        App::resolve(Database::class)->query('INSERT INTO tasks (title, creator_id, assignee_id) VALUES (:title, :creator_id, :assignee_id)', [
             'title' => $data['title'],
-            'user_id' => $data['user_id'],
+            'creator_id' => $data['creator_id'],
+            'assignee_id' => $data['assignee_id']
         ]);
     }
 
     public function deleteTask($id)
     {
-        App::resolve(Database::class)->query('DELETE FROM todo WHERE id = :id', [
+        App::resolve(Database::class)->query('DELETE FROM tasks WHERE id = :id', [
             'id' => $id
         ]);
     }
 
     public function editTask($id)
     {
-        $task = App::resolve(Database::class)->query('select * from todo where id = :id', [
+        $task = App::resolve(Database::class)->query('select * from tasks where id = :id', [
             'id' => $id
         ])->findOrFail();
 
@@ -30,7 +31,7 @@ class TaskRepository
 
     public function updateTask($data)
     {
-        App::resolve(Database::class)->query('update todo set title = :title where id = :id', [
+        App::resolve(Database::class)->query('update tasks set title = :title where id = :id', [
             'id' => $data['id'],
             'title' => $data['title'],
         ]);

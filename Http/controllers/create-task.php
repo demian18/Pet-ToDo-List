@@ -1,5 +1,8 @@
 <?php
 
+use Core\App;
+use Core\Database;
+use Core\Session;
 use Core\TaskRepository;
 use Http\Forms\TaskForm;
 
@@ -10,11 +13,20 @@ if (!$form->validate()) {
     header("Location: /?$errorParams");
     exit();
 }
+$session_user = Session::get('user');
+$email = $session_user['email'];
+
+$db = App::resolve(Database::class);
+
+$user = $db->query('SELECT id FROM users WHERE email = :email', [
+    'email' => $email
+])->findOrFail();
 
 $taskRepository = new TaskRepository();
 $taskRepository->createTask([
     'title' => $form->get('title'),
-    'user_id' => 1
+    'assignee_id' => $form->get('assignee'),
+    'creator_id' => $user['id'],
 ]);
 
 header('Location: /');
