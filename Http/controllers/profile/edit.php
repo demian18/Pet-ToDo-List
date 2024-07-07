@@ -10,6 +10,6 @@ $profileRepository = new ProfileRepository();
 
 $user = $profileRepository->findUser($email);
 
-view('profile/index.view.php', [
+view('profile/edit.view.php', [
     'user' => $user
 ]);
