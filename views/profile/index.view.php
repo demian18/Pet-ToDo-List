@@ -42,7 +42,7 @@
                 <div class="grid grid-cols-2 gap-4 mt-4">
                     <div>
                         <p class="text-gray-600">Time in the company</p>
-                        <p class="text-gray-800 font-semibold">2 years</p>
+                        <p class="text-gray-800 font-semibold"><?= $time ?></p>
                     </div>
                     <div>
                         <p class="text-gray-600">Tasks completed</p>

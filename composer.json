@@ -13,5 +13,8 @@
     "allow-plugins": {
       "pestphp/pest-plugin": true
     }
+  },
+  "require": {
+    "nesbot/carbon": "^3.6"
   }
 }
