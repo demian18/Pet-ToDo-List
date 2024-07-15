@@ -40,7 +40,9 @@ if ($session_user == null) {
             'users' => $users
         ]);
     } elseif ($role == 1) { // Worker
-        $tasks = $db->query('select * from tasks LEFT JOIN status ON status.id = tasks.status_id where assignee_id = :assignee_id', [
+        $tasks = $db->query('SELECT tasks.id AS task_id, tasks.title, tasks.body, tasks.status_id, tasks.assignee_id, tasks.creator_id,
+            status.status AS status_name
+            FROM tasks LEFT JOIN status ON status.id = tasks.status_id where tasks.assignee_id = :assignee_id', [
             'assignee_id' => $user_id
         ])->get();
 

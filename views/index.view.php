@@ -107,37 +107,41 @@
                             <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Help</button>
                         </div>
                     </div>
-                    <?php if (isset($tasks)): ?>
-                        <?php foreach ($tasks as $task) : ?>
-                            <div class="px-6 py-4">
-                                <table class="min-w-full bg-white">
-                                    <thead>
-                                    <tr>
-                                        <th class="py-2 text-left">Task title</th>
-                                        <th class="py-2 text-left">Period of execution</th>
-                                        <th class="py-2 text-left">Status</th>
-                                        <th class="py-2 text-left">Actions</th>
-                                    </tr>
-                                    </thead>
+
+                    <div class="px-6 py-4">
+                        <table class="min-w-full bg-white">
+                            <thead>
+                            <tr>
+                                <th class="py-2 text-left">Task title</th>
+                                <th class="py-2 text-left">Period of execution</th>
+                                <th class="py-2 text-left">Status</th>
+                                <th class="py-2 text-left">Actions</th>
+                            </tr>
+                            </thead>
+                            <?php if (isset($tasks)): ?>
+                                <?php foreach ($tasks as $task) : ?>
                                     <tbody>
                                     <tr>
                                         <td class="py-2"><?= $task['title'] ?></td>
-                                        <td class="py-2">2024-06-01</td>
-                                        <td class="py-2"><?= $task['status'] ?></td>
+                                        <td class="py-2"><?= $task['task_id'] ?></td>
+                                        <td class="py-2 task-status"
+                                            data-task-id="<?= $task['task_id'] ?>"><?= $task['status_name'] ?></td>
                                         <td class="py-2 space-x-2">
-                                            <button class="bg-green-500 text-white px-2 py-1 rounded-md">To perform
+                                            <button class="bg-green-500 text-white px-2 py-1 rounded-md perform-btn"
+                                                    data-task-id="<?= $task['task_id'] ?>">To perform
                                             </button>
                                             <button class="bg-yellow-500 text-white px-2 py-1 rounded-md">Help</button>
                                             <button class="bg-blue-500 text-white px-2 py-1 rounded-md">Comment</button>
                                         </td>
                                     </tr>
                                     </tbody>
-                                </table>
-                            </div>
-                        <?php endforeach; ?>
-                    <?php else : ?>
-                        <p>Oops, there are no tasks yet...</p>
-                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php else : ?>
+                                <p>Oops, there are no tasks yet...</p>
+                            <?php endif; ?>
+
+                        </table>
+                    </div>
                 </div>
             <?php endif; ?>
         <?php endif; ?>
