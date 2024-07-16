@@ -19,3 +19,5 @@ $router->get('/edit-profile', '/profile/edit.php')->only('auth');
 $router->patch('/update-profile', '/profile/update.php')->only('auth');
 
 $router->post('/update-task-status', '/task-handl.php')->only('auth');
+
+$router->post('/filter-tasks', '/filter-tasks.php')->only('auth');

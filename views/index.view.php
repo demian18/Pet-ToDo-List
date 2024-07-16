@@ -92,57 +92,68 @@
                     </div>
                 </div>
             <?php else : ?>
-                <div class="mx-auto max-w-7xl bg-white py-6 sm:px-6 lg:px-8 mt-10">
+                <div class="tasks-container" id="tasks-container">
+                    <div class="mx-auto max-w-7xl bg-white py-6 sm:px-6 lg:px-8 mt-10">
+                        <div class="bg-gray-800 text-white px-4 py-3">
+                            <h2 class="text-xl font-semibold">My tasks</h2>
+                        </div>
 
-                    <div class="bg-gray-800 text-white px-4 py-3">
-                        <h2 class="text-xl font-semibold">My tasks</h2>
-                    </div>
+                        <div class="px-6 py-4">
+                            <h3 class="text-lg font-semibold">Filters:</h3>
+                            <div class="mt-2 space-x-4">
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-md filter-btn"
+                                        data-status="all">All
+                                </button>
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-md filter-btn"
+                                        data-status="completed">Completed
+                                </button>
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-md filter-btn"
+                                        data-status="canceled">Canceled
+                                </button>
+                                <button class="bg-blue-500 text-white px-4 py-2 rounded-md filter-btn"
+                                        data-status="help">Help
+                                </button>
+                            </div>
+                        </div>
 
-                    <div class="px-6 py-4">
-                        <h3 class="text-lg font-semibold">Filters:</h3>
-                        <div class="mt-2 space-x-4">
-                            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">All</button>
-                            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Completed</button>
-                            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Unfulfilled</button>
-                            <button class="bg-blue-500 text-white px-4 py-2 rounded-md">Help</button>
+                        <div class="px-6 py-4" id="tasks-content">
+                            <table class="min-w-full bg-white" >
+                                <thead>
+                                <tr>
+                                    <th class="py-2 text-left">Task title</th>
+                                    <th class="py-2 text-left">Period of execution</th>
+                                    <th class="py-2 text-left">Status</th>
+                                    <th class="py-2 text-left">Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tasks-body">
+                                <?php if (isset($tasks)): ?>
+                                    <?php foreach ($tasks as $task) : ?>
+                                        <tr>
+                                            <td class="py-2"><?= $task['title'] ?></td>
+                                            <td class="py-2"><?= $task['task_id'] ?></td>
+                                            <td class="py-2 task-status"
+                                                data-task-id="<?= $task['task_id'] ?>"><?= $task['status_name'] ?></td>
+                                            <td class="py-2 space-x-2">
+                                                <button class="<?= $task['status_id'] == 2 ? 'bg-green-500' : 'bg-gray-500' ?> text-white px-2 py-1 rounded-md perform-btn"
+                                                        data-task-id="<?= $task['task_id'] ?>"><?= $task['status_id'] == 2 ? 'To perform' : 'Performed' ?></button>
+                                                <button class="bg-yellow-500 text-white px-2 py-1 rounded-md">Help
+                                                </button>
+                                                <button class="bg-blue-500 text-white px-2 py-1 rounded-md">Comment
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else : ?>
+                                    <p>Oops, there are no tasks yet...</p>
+                                <?php endif; ?>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-
-                    <div class="px-6 py-4">
-                        <table class="min-w-full bg-white">
-                            <thead>
-                            <tr>
-                                <th class="py-2 text-left">Task title</th>
-                                <th class="py-2 text-left">Period of execution</th>
-                                <th class="py-2 text-left">Status</th>
-                                <th class="py-2 text-left">Actions</th>
-                            </tr>
-                            </thead>
-                            <?php if (isset($tasks)): ?>
-                                <?php foreach ($tasks as $task) : ?>
-                                    <tbody>
-                                    <tr>
-                                        <td class="py-2"><?= $task['title'] ?></td>
-                                        <td class="py-2"><?= $task['task_id'] ?></td>
-                                        <td class="py-2 task-status"
-                                            data-task-id="<?= $task['task_id'] ?>"><?= $task['status_name'] ?></td>
-                                        <td class="py-2 space-x-2">
-                                            <button class="bg-green-500 text-white px-2 py-1 rounded-md perform-btn"
-                                                    data-task-id="<?= $task['task_id'] ?>">To perform
-                                            </button>
-                                            <button class="bg-yellow-500 text-white px-2 py-1 rounded-md">Help</button>
-                                            <button class="bg-blue-500 text-white px-2 py-1 rounded-md">Comment</button>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                <?php endforeach; ?>
-                            <?php else : ?>
-                                <p>Oops, there are no tasks yet...</p>
-                            <?php endif; ?>
-
-                        </table>
-                    </div>
                 </div>
+
+
             <?php endif; ?>
         <?php endif; ?>
     </main>
