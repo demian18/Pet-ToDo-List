@@ -15,6 +15,14 @@ class ProfileRepository
         return $user;
     }
 
+    public function findUserById($email)
+    {
+        $user = App::resolve(Database::class)->query('SELECT id FROM users WHERE email = :email', [
+            'email' => $email
+        ])->findOrFail();
+        return $user;
+    }
+
     public function editProfile($id)
     {
         $profile = App::resolve(Database::class)->query('select * from users where id = :id', [

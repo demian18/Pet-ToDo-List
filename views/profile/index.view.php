@@ -46,11 +46,11 @@
                     </div>
                     <div>
                         <p class="text-gray-600">Tasks completed</p>
-                        <p class="text-gray-800 font-semibold">100</p>
+                        <p class="text-gray-800 font-semibold"><?= $cpmTasks ?></p>
                     </div>
                     <div>
                         <p class="text-gray-600">Tasks canceled</p>
-                        <p class="text-gray-800 font-semibold">5</p>
+                        <p class="text-gray-800 font-semibold"><?= $cndTasks ?></p>
                     </div>
                     <div>
                         <p class="text-gray-600">Location</p>
