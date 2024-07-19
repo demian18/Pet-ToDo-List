@@ -15,7 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $taskId = $input['id'];
 
     if ($taskId) {
-
         $creator = $db->query('SELECT creator_id FROM tasks WHERE id = :id', [
             'id' => $taskId
         ])->findOrFail();
@@ -24,14 +23,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $profileRepository->findUser($email);
         $user_id = $user['id'];
 
-        $db->query('INSERT INTO notifications (task_id, creator_id, assignee_id)
-                    VALUES (:task_id, :creator_id, :assignee_id)', [
-            'task_id' => $taskId,
-            'creator_id' => $creator_id,
-            'assignee_id' => $user_id,
-        ]);
+        $notifications = $db->query('SELECT id FROM notifications WHERE task_id = :task_id', [
+            'task_id' => $taskId
+        ])->get();
 
-        echo json_encode(['status' => 'success', 'message' => 'help','id' => $taskId,  'creator_id' => $creator_id]);
+        if (empty($notifications)) {
+            $db->query('INSERT INTO notifications (task_id, creator_id, assignee_id)
+                    VALUES (:task_id, :creator_id, :assignee_id)', [
+                'task_id' => $taskId,
+                'creator_id' => $creator_id,
+                'assignee_id' => $user_id,
+            ]);
+
+            $db->query('UPDATE tasks set status_id = 4 where id = :id', [
+                'id' => $taskId,
+            ]);
+
+            echo json_encode(['status' => 'success', 'message' => 'help', 'id' => $taskId, 'creator_id' => $creator_id]);
+        } else {
+            echo json_encode(['status' => 'success', 'message' => 'notification already exists']);
+        }
     } else {
         echo json_encode(['success' => false, 'message' => 'Invalid task ID']);
     }

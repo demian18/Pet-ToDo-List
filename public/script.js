@@ -37,6 +37,7 @@ function sendPostRequest(taskId, action, buttonElement) {
         .then(data => {
             if (data.message === 'perform') {
                 const statusElement = document.querySelector(`.task-status[data-task-id="${taskId}"]`);
+                const helpButton = document.querySelector(`.help-btn[data-task-id="${taskId}"]`);
                 if (statusElement) {
                     statusElement.textContent = data.newStatus;
                 }
@@ -46,10 +47,23 @@ function sendPostRequest(taskId, action, buttonElement) {
                     buttonElement.disabled = true;
                     buttonElement.textContent = 'Performed';
                 }
+                if (helpButton) {
+                    helpButton.classList.remove('bg-yellow-500');
+                    helpButton.classList.add('bg-gray-500');
+                    helpButton.disabled = true;
+                }
             } else if (data.message === 'help') {
                 if (buttonElement) {
-                    buttonElement.classList.remove('bg-yellow-500');
-                    buttonElement.classList.add('bg-red-500');
+                    const statusElement = document.querySelector(`.task-status[data-task-id="${taskId}"]`);
+                    console.log(data)
+                    if (statusElement) {
+                        statusElement.textContent = data.newStatus;
+                    }
+                    if (buttonElement) {
+                        buttonElement.classList.remove('bg-yellow-500');
+                        buttonElement.classList.add('bg-red-500');
+                        buttonElement.disabled = true;
+                    }
                 }
             } else {
                 console.error('Error:', data.message);
@@ -84,7 +98,7 @@ document.querySelectorAll('.filter-btn').forEach(button => {
 });
 
 // ajax cron
-function fetchNotifications(userId) {
+function fetchNotifications() {
     fetch('/get-notifications', {
         method: 'POST',
         headers: {
@@ -94,22 +108,17 @@ function fetchNotifications(userId) {
         .then(response => response.json())
         .then(data => {
             const notificationCountElement = document.getElementById('notification-count');
-            console.log(data)
-            const creator_id = data['0']['creator_id'];
-            const type = data['0']['type'];
-            if (userId == creator_id) { // Admin check
-                if (type == "help") {
-                    if (data.length > 0) {
-                        notificationCountElement.textContent = data.length;
-                        notificationCountElement.style.display = 'block';
-                    } else {
-                        notificationCountElement.style.display = 'none';
-                    }
-                }
+            const count = data.count;
+
+            if (count  > 0) {
+                notificationCountElement.textContent = count;
+                notificationCountElement.style.display = 'block';
+            } else {
+                notificationCountElement.style.display = 'none';
             }
+
         })
         .catch(error => console.error('Error fetching notifications:', error));
 }
-const userId = document.querySelector('[data-user-id]').getAttribute('data-user-id');
-setInterval(() => fetchNotifications(userId), 300000);
-fetchNotifications(userId);
+setInterval(fetchNotifications, 300000);
+fetchNotifications();

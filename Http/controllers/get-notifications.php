@@ -14,9 +14,11 @@ $profileRepository = new ProfileRepository();
 $user = $profileRepository->findUser($email);
 $user_id = $user['id'];
 
-$notifications = $db->query('SELECT * FROM notifications WHERE creator_id = :creator_id AND status = 0', [
+$notification_count = $db->query('SELECT COUNT(*) as count FROM notifications WHERE creator_id = :creator_id AND status = 0', [
     'creator_id' => $user_id
-])->get();
+])->findOrFail();
 
 header('Content-Type: application/json');
-echo json_encode($notifications);
+echo json_encode([
+    'count' => $notification_count['count'],
+]);
