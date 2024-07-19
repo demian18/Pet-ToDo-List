@@ -37,7 +37,8 @@ if ($session_user == null) {
             'errors' => $errors,
             'tasks' => $tasks,
             'role' => $role,
-            'users' => $users
+            'users' => $users,
+            'user_id' => $user_id,
         ]);
     } elseif ($role == 1) { // Worker
         $tasks = $db->query('SELECT tasks.id AS task_id, tasks.title, tasks.body, tasks.status_id, tasks.assignee_id, tasks.creator_id,
@@ -50,6 +51,7 @@ if ($session_user == null) {
             'errors' => $errors,
             'tasks' => $tasks,
             'role' => $role,
+            'user_id' => $user_id,
         ]);
     }
 }

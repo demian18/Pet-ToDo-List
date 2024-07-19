@@ -10,6 +10,7 @@
                 <p>Oops, to view the page, you need to log in...</p>
             </div>
         <?php else : ?>
+            <input type="hidden" data-user-id="<?= $user_id ?>">
             <?php if ($role == 2) : ?>
                 <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
                     <!-- Your content -->
@@ -117,7 +118,7 @@
                         </div>
 
                         <div class="px-6 py-4" id="tasks-content">
-                            <table class="min-w-full bg-white" >
+                            <table class="min-w-full bg-white">
                                 <thead>
                                 <tr>
                                     <th class="py-2 text-left">Task title</th>
@@ -135,9 +136,12 @@
                                             <td class="py-2 task-status"
                                                 data-task-id="<?= $task['task_id'] ?>"><?= $task['status_name'] ?></td>
                                             <td class="py-2 space-x-2">
-                                                <button class="<?= $task['status_id'] == 2 ? 'bg-green-500' : 'bg-gray-500' ?> text-white px-2 py-1 rounded-md perform-btn"
-                                                        data-task-id="<?= $task['task_id'] ?>"><?= $task['status_id'] == 2 ? 'To perform' : 'Performed' ?></button>
-                                                <button class="bg-yellow-500 text-white px-2 py-1 rounded-md">Help
+                                                <button class="<?= $task['status_id'] == 2 ? 'bg-green-500' : 'bg-gray-500' ?>
+                                                    text-white px-2 py-1 rounded-md perform-btn"
+                                                        data-task-id="<?= $task['task_id'] ?>">
+                                                    <?= $task['status_id'] == 2 ? 'To perform' : 'Performed' ?></button>
+                                                <button class="bg-yellow-500 text-white px-2 py-1 rounded-md help-btn"
+                                                        data-task-id="<?= $task['task_id'] ?>">Help
                                                 </button>
                                                 <button class="bg-blue-500 text-white px-2 py-1 rounded-md">Comment
                                                 </button>

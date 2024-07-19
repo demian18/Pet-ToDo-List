@@ -21,3 +21,7 @@ $router->patch('/update-profile', '/profile/update.php')->only('auth');
 $router->post('/update-task-status', '/task-handl.php')->only('auth');
 
 $router->post('/filter-tasks', '/filter-tasks.php')->only('auth');
+
+$router->post('/help-task', '/help-tasks.php')->only('auth');
+
+$router->post('/get-notifications', '/get-notifications.php')->only('auth');

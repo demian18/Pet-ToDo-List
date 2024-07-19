@@ -15,6 +15,7 @@
     }
   },
   "require": {
-    "nesbot/carbon": "^3.6"
+    "nesbot/carbon": "^3.6",
+    "dragonmantank/cron-expression": "^3.3"
   }
 }
