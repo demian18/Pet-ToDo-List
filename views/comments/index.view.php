@@ -27,6 +27,19 @@
                     </div>
                 </div>
             <?php endforeach; ?>
+            <form method="POST" action="/close-notice">
+                <div class="flex flex-col items-end">
+                    <div class="mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-1">
+                        <div class="mt-2 flex items-center">
+                            <input type="hidden" name="task_id" value="<?= htmlspecialchars($taskId) ?>">
+                            <button type="submit"
+                                    class="ml-4 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                                Close the notice
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
     </main>
     <div class="mx-auto max-w-7xl bg-white py-6 sm:px-6 lg:px-8 mt-10">

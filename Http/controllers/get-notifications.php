@@ -14,7 +14,7 @@ $profileRepository = new ProfileRepository();
 $user = $profileRepository->findUser($email);
 $user_id = $user['id'];
 
-$notification_count = $db->query('SELECT COUNT(*) as count FROM notifications WHERE assignee_id = :assignee_id AND status = 0', [
+$notification_count = $db->query('SELECT COUNT(*) as count FROM notifications WHERE assignee_id = :assignee_id AND status = "new"', [
     'assignee_id' => $user_id
 ])->findOrFail();
 

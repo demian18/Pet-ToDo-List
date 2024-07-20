@@ -18,7 +18,7 @@ $notifications = $db->query('SELECT n.id, n.task_id, n.assignee_id, u.email, n.t
                             FROM notifications n
                             JOIN users u ON n.creator_id = u.id
                             WHERE n.assignee_id = :assignee_id 
-                            AND n.status = 0', [
+                            AND n.status != "completed"', [
     'assignee_id' => $user_id
 ])->get();
 

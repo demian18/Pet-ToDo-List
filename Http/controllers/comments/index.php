@@ -19,6 +19,7 @@ $user_id = $user['id'];
 $user_role = $user['role_id'];
 
 $comments = $db->query('SELECT * FROM comments')->get();
+$db->query('UPDATE notifications SET status = "viewed"');
 
 view('comments/index.view.php', [
     'taskId' => $taskId,
