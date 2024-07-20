@@ -25,3 +25,7 @@ $router->post('/filter-tasks', '/filter-tasks.php')->only('auth');
 $router->post('/help-task', '/help-tasks.php')->only('auth');
 
 $router->post('/get-notifications', '/get-notifications.php')->only('auth');
+
+$router->get('/notifications', '/notifications/index.php')->only('auth');
+$router->get('/task-comments', '/comments/index.php')->only('auth');
+$router->post('/create-comment', '/comments/create.php')->only('auth');

@@ -19,6 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'id' => $taskId
         ])->findOrFail();
         $creator_id = $creator['creator_id'];
+
         $profileRepository = new ProfileRepository();
         $user = $profileRepository->findUser($email);
         $user_id = $user['id'];
@@ -31,15 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $db->query('INSERT INTO notifications (task_id, creator_id, assignee_id)
                     VALUES (:task_id, :creator_id, :assignee_id)', [
                 'task_id' => $taskId,
-                'creator_id' => $creator_id,
-                'assignee_id' => $user_id,
+                'creator_id' => $user_id,
+                'assignee_id' => $creator_id,
             ]);
 
             $db->query('UPDATE tasks set status_id = 4 where id = :id', [
                 'id' => $taskId,
             ]);
 
-            echo json_encode(['status' => 'success', 'message' => 'help', 'id' => $taskId, 'creator_id' => $creator_id]);
+            echo json_encode(['status' => 'success', 'message' => 'help', 'id' => $taskId, 'creator_notifications' => $user_id]);
         } else {
             echo json_encode(['status' => 'success', 'message' => 'notification already exists']);
         }

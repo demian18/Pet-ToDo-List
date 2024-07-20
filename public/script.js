@@ -8,6 +8,27 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 });
 
+document.addEventListener('DOMContentLoaded', function () {
+    const button = document.getElementById('user-notifications-button');
+
+    if (button) {
+        button.addEventListener('click', function () {
+            window.location.href = '/notifications';
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const buttons = document.querySelectorAll('.to-write-btn');
+
+    buttons.forEach(function(button) {
+        button.addEventListener('click', function () {
+            const taskId = this.getAttribute('data-task-id');
+            window.location.href = `/task-comments?id=${taskId}`;
+        });
+    });
+});
+
 document.querySelectorAll('.perform-btn, .help-btn').forEach(button => {
     button.addEventListener('click', function () {
         const taskId = this.getAttribute('data-task-id');
@@ -55,7 +76,6 @@ function sendPostRequest(taskId, action, buttonElement) {
             } else if (data.message === 'help') {
                 if (buttonElement) {
                     const statusElement = document.querySelector(`.task-status[data-task-id="${taskId}"]`);
-                    console.log(data)
                     if (statusElement) {
                         statusElement.textContent = data.newStatus;
                     }
