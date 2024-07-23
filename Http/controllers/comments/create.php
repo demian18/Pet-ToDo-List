@@ -10,6 +10,7 @@ $email = $session_user['email'];
 
 $comment = $_POST['comment'];
 $task_id = $_POST['task_id'];
+$not_id = $_POST['not_id'];
 
 $db = App::resolve(Database::class);
 
@@ -19,49 +20,33 @@ $user = $profileRepository->findUser($email);
 $user_id = $user['id'];
 $user_role = $user['role_id'];
 
-$notifications = $db->query('SELECT id, task_id, assignee_id, creator_id 
+$notification = $db->query('SELECT id, task_id, assignee_id, creator_id 
                             FROM notifications
-                            WHERE type = :type', [
-    'type' => 'help',
-])->get();
+                            WHERE id = :not_id', [
+    'not_id' => $not_id,
+])->findOrFail();
 
-if ($notifications) {
-    foreach ($notifications as $notification) {
-        if ($user_role == 2) {
-            $db->query('INSERT INTO comments (comment, not_id, task_id, creator_id, assignee_id) VALUES (:comment, :not_id, :task_id, :creator_id, :assignee_id)', [
-                'comment' => $comment,
-                'not_id' => $notification['id'],
-                'task_id' => $task_id,
-                'creator_id' => $user_id,
-                'assignee_id' => $notification['creator_id']
-            ]);
-            $db->query('INSERT INTO notifications (task_id, creator_id, assignee_id, type)
-                    VALUES (:task_id, :creator_id, :assignee_id, :type)', [
-                'task_id' => $task_id,
-                'creator_id' => $user_id,
-                'assignee_id' => $notification['creator_id'],
-                'type' => 'comment',
-            ]);
-
-            header('location: /notifications');
-            exit();
-        } else {
-            $db->query('INSERT INTO comments (comment, not_id, task_id, creator_id, assignee_id) VALUES (:comment, :not_id, :task_id, :creator_id, :assignee_id)', [
-                'comment' => $comment,
-                'not_id' => $notification['id'],
-                'task_id' => $task_id,
-                'creator_id' => $user_id,
-                'assignee_id' => $notification['assignee_id']
-            ]);
-            $db->query('INSERT INTO notifications (task_id, creator_id, assignee_id, type)
-                    VALUES (:task_id, :creator_id, :assignee_id, :type)', [
-                'task_id' => $task_id,
-                'creator_id' => $user_id,
-                'assignee_id' => $notification['assignee_id'],
-                'type' => 'comment',
-            ]);
-            header('location: /notifications');
-            exit();
-        }
-    }
+if ($user_role == 2) {
+    $assignee_id = $notification['creator_id'];
+} else {
+    $assignee_id = $notification['assignee_id'];
 }
+
+$db->query('INSERT INTO comments (comment, not_id, task_id, creator_id, assignee_id) VALUES (:comment, :not_id, :task_id, :creator_id, :assignee_id)', [
+    'comment' => $comment,
+    'not_id' => $not_id,
+    'task_id' => $task_id,
+    'creator_id' => $user_id,
+    'assignee_id' => $assignee_id
+]);
+
+$db->query('INSERT INTO notifications (task_id, creator_id, assignee_id, type, status) VALUES (:task_id, :creator_id, :assignee_id, :type, :status)', [
+    'task_id' => $task_id,
+    'creator_id' => $user_id,
+    'assignee_id' => $assignee_id,
+    'type' => 'comment',
+    'status' => 'new'
+]);
+
+header('Location: /notifications');
+exit();
