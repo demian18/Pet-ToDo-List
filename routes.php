@@ -31,3 +31,6 @@ $router->get('/notifications', '/notifications/index.php')->only('auth');
 $router->post('/close-notice', '/notifications/close-notice.php')->only('auth');
 $router->get('/task-comments', '/comments/index.php')->only('auth');
 $router->post('/create-comment', '/comments/create.php')->only('auth');
+
+$router->get('/tasks', '/admin/index.php')->only('auth');
+$router->post('/cancel-task-admin', '/admin/cancel-task.php')->only('auth');
