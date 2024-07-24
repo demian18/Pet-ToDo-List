@@ -21,20 +21,11 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     const buttons = document.querySelectorAll('.to-write-btn');
 
-    buttons.forEach(function(button) {
+    buttons.forEach(function (button) {
         button.addEventListener('click', function () {
             const taskId = this.getAttribute('data-task-id');
             window.location.href = `/task-comments?id=${taskId}`;
         });
-    });
-});
-
-document.querySelectorAll('.perform-btn, .help-btn').forEach(button => {
-    button.addEventListener('click', function () {
-        const taskId = this.getAttribute('data-task-id');
-        const action = this.classList.contains('perform-btn') ? 'perform' : 'help';
-
-        sendPostRequest(taskId, action, this);
     });
 });
 
@@ -45,6 +36,8 @@ function sendPostRequest(taskId, action, buttonElement) {
         url = '/update-task-status';
     } else if (action === 'help') {
         url = '/help-task';
+    } else if (action === 'cancel') {
+        url = '/cancel-task';
     }
 
     fetch(url, {
@@ -57,37 +50,88 @@ function sendPostRequest(taskId, action, buttonElement) {
         .then(response => response.json())
         .then(data => {
             if (data.message === 'perform') {
-                const statusElement = document.querySelector(`.task-status[data-task-id="${taskId}"]`);
-                const helpButton = document.querySelector(`.help-btn[data-task-id="${taskId}"]`);
-                if (statusElement) {
-                    statusElement.textContent = data.newStatus;
-                }
-                if (buttonElement) {
-                    buttonElement.classList.remove('bg-green-500');
-                    buttonElement.classList.add('bg-gray-500');
-                    buttonElement.disabled = true;
-                    buttonElement.textContent = 'Performed';
-                }
-                if (helpButton) {
-                    helpButton.classList.remove('bg-yellow-500');
-                    helpButton.classList.add('bg-gray-500');
-                    helpButton.disabled = true;
-                }
+                handlePerformResponse(data, buttonElement);
             } else if (data.message === 'help') {
-                if (buttonElement) {
-                    const statusElement = document.querySelector(`.task-status[data-task-id="${taskId}"]`);
-                    if (statusElement) {
-                        statusElement.textContent = data.newStatus;
-                    }
-                    if (buttonElement) {
-                        buttonElement.classList.remove('bg-yellow-500');
-                        buttonElement.classList.add('bg-red-500');
-                        buttonElement.disabled = true;
-                    }
-                }
+                handleHelpResponse(data, buttonElement);
+            } else if (data.message === 'cancel') {
+                handleCancelResponse(data, buttonElement);
             } else {
                 console.error('Error:', data.message);
             }
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+}
+
+function handlePerformResponse(data, buttonElement) {
+    const statusElement = document.querySelector(`.task-status[data-task-id="${data.id}"]`);
+    const helpButton = document.querySelector(`.help-btn[data-task-id="${data.id}"]`);
+    if (statusElement) {
+        statusElement.textContent = data.newStatus;
+    }
+    if (buttonElement) {
+        buttonElement.classList.remove('bg-green-500');
+        buttonElement.classList.add('bg-gray-500');
+        buttonElement.disabled = true;
+        buttonElement.textContent = 'Performed';
+    }
+    if (helpButton) {
+        helpButton.classList.remove('bg-yellow-500');
+        helpButton.classList.add('bg-gray-500');
+        helpButton.disabled = true;
+    }
+}
+
+function handleHelpResponse(data, buttonElement) {
+    const statusElement = document.querySelector(`.task-status[data-task-id="${data.id}"]`);
+    if (statusElement) {
+        statusElement.textContent = data.newStatus;
+    }
+    if (buttonElement) {
+        buttonElement.classList.remove('bg-yellow-500');
+        buttonElement.classList.add('bg-red-500');
+        buttonElement.disabled = true;
+    }
+}
+
+function handleCancelResponse(data, buttonElement) {
+    const statusElement = document.querySelector(`.task-status[data-task-id="${data.id}"]`);
+    if (statusElement) {
+        statusElement.textContent = data.newStatus;
+    }
+    if (buttonElement) {
+        buttonElement.classList.remove('bg-blue-500');
+        buttonElement.classList.add('bg-red-500');
+        buttonElement.disabled = true;
+        buttonElement.textContent = 'Cancelled';
+    }
+}
+
+document.addEventListener('click', function(event) {
+    if (event.target.classList.contains('filter-btn')) {
+        handleFilterClick(event);
+    } else if (event.target.classList.contains('perform-btn') ||
+        event.target.classList.contains('help-btn') ||
+        event.target.classList.contains('cancel-btn')) {
+        handleActionClick(event);
+    }
+});
+
+function handleFilterClick(event) {
+    const status = event.target.getAttribute('data-status');
+
+    fetch('/filter-tasks', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({status: status}),
+    })
+        .then(response => response.json())
+        .then(data => {
+            const tasksBody = document.querySelector('#tasks-body');
+            tasksBody.innerHTML = data.tasksHtml;
 
         })
         .catch((error) => {
@@ -95,52 +139,22 @@ function sendPostRequest(taskId, action, buttonElement) {
         });
 }
 
-document.querySelectorAll('.filter-btn').forEach(button => {
-    button.addEventListener('click', function () {
-        const status = this.getAttribute('data-status');
+function handleActionClick(event) {
+    const button = event.target;
+    const taskId = button.getAttribute('data-task-id');
+    let action;
 
-        fetch('/filter-tasks', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({status: status}),
-        })
-            .then(response => response.json())
-            .then(data => {
-                const tasksBody = document.querySelector('#tasks-body');
-                tasksBody.innerHTML = data.tasksHtml;
+    if (button.classList.contains('perform-btn')) {
+        action = 'perform';
+    } else if (button.classList.contains('help-btn')) {
+        action = 'help';
+    } else if (button.classList.contains('cancel-btn')) {
+        action = 'cancel';
+    }
 
-                // Повторное прикрепление обработчиков событий для новых элементов
-                attachEventHandlers();
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-    });
-});
-
-// Функция для прикрепления обработчиков событий
-function attachEventHandlers() {
-    document.querySelectorAll('.perform-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const taskId = this.getAttribute('data-task-id');
-            console.log(`Performing task ${taskId}`);
-            sendPostRequest(taskId, 'perform', this);
-        });
-    });
-
-    document.querySelectorAll('.help-btn').forEach(button => {
-        button.addEventListener('click', function () {
-            const taskId = this.getAttribute('data-task-id');
-            console.log(`Helping with task ${taskId}`);
-            sendPostRequest(taskId, 'help', this);
-        });
-    });
+    sendPostRequest(taskId, action, button);
 }
 
-// Первоначальное прикрепление обработчиков событий
-attachEventHandlers();
 // ajax cron
 function fetchNotifications() {
     fetch('/get-notifications', {
@@ -154,7 +168,7 @@ function fetchNotifications() {
             const notificationCountElement = document.getElementById('notification-count');
             const count = data.count;
 
-            if (count  > 0) {
+            if (count > 0) {
                 notificationCountElement.textContent = count;
                 notificationCountElement.style.display = 'block';
             } else {
@@ -164,5 +178,6 @@ function fetchNotifications() {
         })
         .catch(error => console.error('Error fetching notifications:', error));
 }
+
 setInterval(fetchNotifications, 300000);
 fetchNotifications();
