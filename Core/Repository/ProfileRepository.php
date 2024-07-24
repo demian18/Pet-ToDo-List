@@ -41,4 +41,11 @@ class ProfileRepository
             'username' => $data['username'],
         ]);
     }
+    public function updateProfilePhoto($id, $fileName)
+    {
+        App::resolve(Database::class)->query('UPDATE users SET picture = :picture WHERE id = :id', [
+            'picture' => $fileName,
+            'id' => $id,
+        ]);
+    }
 }
