@@ -110,6 +110,9 @@ document.querySelectorAll('.filter-btn').forEach(button => {
             .then(data => {
                 const tasksBody = document.querySelector('#tasks-body');
                 tasksBody.innerHTML = data.tasksHtml;
+
+                // Повторное прикрепление обработчиков событий для новых элементов
+                attachEventHandlers();
             })
             .catch((error) => {
                 console.error('Error:', error);
@@ -117,6 +120,27 @@ document.querySelectorAll('.filter-btn').forEach(button => {
     });
 });
 
+// Функция для прикрепления обработчиков событий
+function attachEventHandlers() {
+    document.querySelectorAll('.perform-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const taskId = this.getAttribute('data-task-id');
+            console.log(`Performing task ${taskId}`);
+            sendPostRequest(taskId, 'perform', this);
+        });
+    });
+
+    document.querySelectorAll('.help-btn').forEach(button => {
+        button.addEventListener('click', function () {
+            const taskId = this.getAttribute('data-task-id');
+            console.log(`Helping with task ${taskId}`);
+            sendPostRequest(taskId, 'help', this);
+        });
+    });
+}
+
+// Первоначальное прикрепление обработчиков событий
+attachEventHandlers();
 // ajax cron
 function fetchNotifications() {
     fetch('/get-notifications', {

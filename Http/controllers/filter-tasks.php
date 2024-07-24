@@ -30,6 +30,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'status' => $status,
             'assignee_id' => $user_id
         ])->get();
+    } elseif ($status === 'help') {
+        $tasks = $db->query('SELECT tasks.id AS task_id, tasks.title, tasks.body, tasks.status_id, tasks.assignee_id, tasks.creator_id,
+            status.status AS status_name
+            FROM tasks 
+            LEFT JOIN status ON status.id = tasks.status_id 
+            WHERE status.status = :status AND tasks.assignee_id = :assignee_id', [
+            'status' => $status,
+            'assignee_id' => $user_id
+        ])->get();
     }
 
     ob_start();

@@ -146,10 +146,6 @@
                                                     <?= $task['status_id'] != 2 ? 'disabled' : '' ?>>
                                                     Help
                                                 </button>
-                                                <button class="bg-blue-500 text-white px-2 py-1 rounded-md comment-btn"
-                                                        data-task-id="<?= $task['task_id'] ?>">
-                                                    Comment
-                                                </button>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
