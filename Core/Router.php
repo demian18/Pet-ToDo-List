@@ -51,6 +51,15 @@ class Router
             if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
                 Middleware::resolve($route['middleware']);
 
+                $controller = $route['controller'];
+
+                if (is_array($controller)) {
+                    $controllerClass = $controller[0];
+                    $controllerMethod = $controller[1];
+
+                    $controllerInstance = new $controllerClass();
+                    return $controllerInstance->$controllerMethod();
+                }
                 return require base_path('Http/controllers' . $route['controller']);
             }
         }

@@ -7,12 +7,12 @@ $router->delete('/delete-task', '/delete-task.php')->only('auth');
 $router->get('/edit-task', '/edit-task.php')->only('auth');
 $router->patch('/update-task', '/update-task.php')->only('auth');
 
-$router->get('/register', '/register/create.php')->only('guest');
-$router->post('/register', '/register/store.php');
+$router->get('/register', [\Http\controllers\UserController::class, 'create_register'])->only('guest');
+$router->post('/register', [\Http\controllers\UserController::class, 'register']);
 
-$router->get('/login', '/session/create.php')->only('guest');
-$router->post('/session', '/session/store.php')->only('guest');
-$router->delete('/session', '/session/destroy.php')->only('auth');
+$router->get('/login', [\Http\controllers\UserController::class, 'create_session'])->only('guest');
+$router->post('/session', [\Http\controllers\UserController::class, 'login'])->only('guest');
+$router->delete('/session', [\Http\controllers\UserController::class, 'logout'])->only('auth');
 
 $router->get('/profile', '/profile/index.php')->only('auth');
 $router->get('/edit-profile', '/profile/edit.php')->only('auth');

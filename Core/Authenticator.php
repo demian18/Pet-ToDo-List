@@ -2,14 +2,19 @@
 
 namespace Core;
 
+use Core\Repository\UserRepository;
+
 class Authenticator
 {
+    protected $userRepo;
+
+    public function __construct(UserRepository $userRepo)
+    {
+        $this->userRepo = $userRepo;
+    }
     public function attempt($email, $password)
     {
-        $user = App::resolve(Database::class)
-            ->query('select * from users where email = :email', [
-                'email' => $email
-            ])->find();
+        $user = $this->userRepo->findByEmail($email);
 
         if ($user) {
             if (password_verify($password, $user['password'])) {

@@ -3,7 +3,8 @@
   "autoload": {
     "psr-4": {
       "Core\\": "Core/",
-      "Http\\": "Http/"
+      "Http\\": "Http/",
+      "Models\\": "Models/"
     }
   },
   "require-dev": {
@@ -16,6 +17,7 @@
   },
   "require": {
     "nesbot/carbon": "^3.6",
-    "dragonmantank/cron-expression": "^3.3"
+    "dragonmantank/cron-expression": "^3.3",
+    "monolog/monolog": "^3.7"
   }
 }

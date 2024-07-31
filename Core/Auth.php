@@ -4,7 +4,7 @@ namespace Core;
 
 use Core\Repository\UserRepository;
 
-class Registration
+class Auth
 {
     protected $userRepo;
 
@@ -13,20 +13,29 @@ class Registration
         $this->userRepo = $userRepo;
     }
 
+    public function register($email, $password)
+    {
+        if ($this->userRepo->findByEmail($email)) {
+            return false;
+        }
+
+        $this->userRepo->create($email, $password);
+        $this->login(['email' => $email]);
+
+        return true;
+    }
+
     public function attempt($email, $password)
     {
         $user = $this->userRepo->findByEmail($email);
 
-        if ($user) {
-            return false;
-        } else {
-            $this->userRepo->create($email, $password);
-
+        if ($user && password_verify($password, $user->getPassword())) {
             $this->login([
                 'email' => $email
             ]);
             return true;
         }
+        return false;
     }
 
     public function login($user)
@@ -36,5 +45,10 @@ class Registration
         ];
 
         session_regenerate_id(true);
+    }
+
+    public function logout()
+    {
+        Session::destroy();
     }
 }
