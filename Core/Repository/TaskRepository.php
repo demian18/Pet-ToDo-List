@@ -1,12 +1,21 @@
 <?php
 
-namespace Core;
+namespace Core\Repository;
+
+use Core\App;
+use Core\Database;
 
 class TaskRepository
 {
-    public function createTask($data)
+    protected Database $db;
+
+    public function __construct(Database $db)
     {
-        App::resolve(Database::class)->query('INSERT INTO tasks (title, creator_id, assignee_id) VALUES (:title, :creator_id, :assignee_id)', [
+        $this->db = $db;
+    }
+    public function createTask($data): void
+    {
+        $this->db->query('INSERT INTO tasks (title, creator_id, assignee_id) VALUES (:title, :creator_id, :assignee_id)', [
             'title' => $data['title'],
             'creator_id' => $data['creator_id'],
             'assignee_id' => $data['assignee_id']

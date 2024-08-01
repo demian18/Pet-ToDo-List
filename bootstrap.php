@@ -3,6 +3,7 @@
 use Core\App;
 use Core\Container;
 use Core\Database;
+use Core\Repository\TaskRepository;
 use Core\Repository\UserRepository;
 
 $container = new Container();
@@ -17,6 +18,10 @@ App::setContainer($container);
 
 App::bind(UserRepository::class, function() {
     return new UserRepository(App::resolve(Database::class));
+});
+
+App::bind(TaskRepository::class, function() {
+    return new TaskRepository(App::resolve(Database::class));
 });
 
 /*$container->bind('logger', function() {

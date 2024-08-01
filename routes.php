@@ -1,7 +1,7 @@
 <?php
 
 $router->get('/', '/index.php');
-$router->post('/create-task', '/create-task.php')->only('auth');
+$router->post('/create-task', [\Http\controllers\TaskController::class, 'create'])->only('auth');
 $router->delete('/delete-task', '/delete-task.php')->only('auth');
 
 $router->get('/edit-task', '/edit-task.php')->only('auth');

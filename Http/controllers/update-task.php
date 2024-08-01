@@ -1,6 +1,6 @@
 <?php
 
-use Core\TaskRepository;
+use Core\Repository\TaskRepository;
 use Http\Forms\TaskForm;
 
 $taskRepository = new TaskRepository();

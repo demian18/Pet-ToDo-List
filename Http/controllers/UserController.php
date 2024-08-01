@@ -3,8 +3,8 @@
 namespace Http\controllers;
 
 use Core\App;
-use Core\Auth;
 use Core\Repository\UserRepository;
+use Core\Services\Auth;
 use Core\Session;
 use Http\Forms\LoginForm;
 

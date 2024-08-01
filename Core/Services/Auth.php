@@ -1,19 +1,20 @@
 <?php
 
-namespace Core;
+namespace Core\Services;
 
 use Core\Repository\UserRepository;
+use Core\Session;
 
 class Auth
 {
-    protected $userRepo;
+    protected UserRepository $userRepo;
 
     public function __construct(UserRepository $userRepo)
     {
         $this->userRepo = $userRepo;
     }
 
-    public function register($email, $password)
+    public function register($email, $password): bool
     {
         if ($this->userRepo->findByEmail($email)) {
             return false;
@@ -25,7 +26,7 @@ class Auth
         return true;
     }
 
-    public function attempt($email, $password)
+    public function attempt($email, $password): bool
     {
         $user = $this->userRepo->findByEmail($email);
 
@@ -38,7 +39,7 @@ class Auth
         return false;
     }
 
-    public function login($user)
+    public function login($user): void
     {
         $_SESSION['user'] = [
             'email' => $user['email']
@@ -47,7 +48,7 @@ class Auth
         session_regenerate_id(true);
     }
 
-    public function logout()
+    public function logout(): void
     {
         Session::destroy();
     }

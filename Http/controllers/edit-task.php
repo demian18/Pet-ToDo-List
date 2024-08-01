@@ -1,6 +1,6 @@
 <?php
 
-use Core\TaskRepository;
+use Core\Repository\TaskRepository;
 
 $id = $_GET['id'];
 
