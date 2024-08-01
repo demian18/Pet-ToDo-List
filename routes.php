@@ -1,11 +1,11 @@
 <?php
 
-$router->get('/', '/index.php');
+$router->get('/', [\Http\controllers\TaskController::class, 'index']);
 $router->post('/create-task', [\Http\controllers\TaskController::class, 'create'])->only('auth');
-$router->delete('/delete-task', '/delete-task.php')->only('auth');
+$router->delete('/delete-task', [\Http\controllers\TaskController::class, 'delete'])->only('auth');
 
-$router->get('/edit-task', '/edit-task.php')->only('auth');
-$router->patch('/update-task', '/update-task.php')->only('auth');
+$router->get('/edit-task', [\Http\controllers\TaskController::class, 'edit'])->only('auth');
+$router->patch('/update-task', [\Http\controllers\TaskController::class, 'update'])->only('auth');
 
 $router->get('/register', [\Http\controllers\UserController::class, 'create_register'])->only('guest');
 $router->post('/register', [\Http\controllers\UserController::class, 'register']);

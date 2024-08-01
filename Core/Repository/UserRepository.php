@@ -14,14 +14,27 @@ class UserRepository
         $this->db = $db;
     }
 
-    public function findByEmail($email)
+    public function findByEmail($email): ?User
     {
         $data = $this->db->query('SELECT * FROM users WHERE email = :email', [
             'email' => $email
         ])->find();
 
         if ($data) {
-            return new User($data['id'], $data['name'], $data['email'], $data['password']);
+            return new User($data['id'], $data['name'], $data['email'], $data['password'], $data['role_id']);
+        }
+
+        return null;
+    }
+
+    public function findUser($email): ?User
+    {
+        $data = $this->db->query('SELECT id, role_id FROM users WHERE email = :email', [
+            'email' => $email
+        ])->findOrFail();
+
+        if ($data) {
+            return new User($data['id'], null, null, null, $data['role_id']);
         }
 
         return null;
@@ -33,5 +46,10 @@ class UserRepository
             'email' => $email,
             'password' => password_hash($password, PASSWORD_BCRYPT),
         ]);
+    }
+
+    public function getWorkers()
+    {
+        return $this->db->query('SELECT id, email FROM users WHERE role_id != 2')->get();
     }
 }

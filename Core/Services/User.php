@@ -17,4 +17,14 @@ class User
     {
         return $this->userRepo->findByEmail($email);
     }
+
+    public function findUser($email): ?\Models\User
+    {
+        return $this->userRepo->findUser($email);
+    }
+
+    public function getWorkers()
+    {
+        return $this->userRepo->getWorkers();
+    }
 }

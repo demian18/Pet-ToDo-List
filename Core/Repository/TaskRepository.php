@@ -13,6 +13,23 @@ class TaskRepository
     {
         $this->db = $db;
     }
+
+    public function getTasksAdmin($user_id)
+    {
+        return $this->db->query('SELECT * FROM tasks WHERE creator_id = :creator_id', [
+            'creator_id' => $user_id
+        ])->get();
+    }
+
+    public function getTasksWorker($user_id)
+    {
+        return $this->db->query('SELECT tasks.id AS task_id, tasks.title, tasks.body, tasks.status_id, tasks.assignee_id, tasks.creator_id,
+            status.status AS status_name
+            FROM tasks LEFT JOIN status ON status.id = tasks.status_id where tasks.assignee_id = :assignee_id', [
+            'assignee_id' => $user_id
+        ])->get();
+    }
+
     public function createTask($data): void
     {
         $this->db->query('INSERT INTO tasks (title, creator_id, assignee_id) VALUES (:title, :creator_id, :assignee_id)', [
@@ -22,25 +39,25 @@ class TaskRepository
         ]);
     }
 
-    public function deleteTask($id)
+    public function deleteTask($id): void
     {
-        App::resolve(Database::class)->query('DELETE FROM tasks WHERE id = :id', [
+        $this->db->query('DELETE FROM tasks WHERE id = :id', [
             'id' => $id
         ]);
     }
 
     public function editTask($id)
     {
-        $task = App::resolve(Database::class)->query('select * from tasks where id = :id', [
+        $task = $this->db->query('SELECT * FROM tasks WHERE id = :id', [
             'id' => $id
         ])->findOrFail();
 
         return $task;
     }
 
-    public function updateTask($data)
+    public function updateTask($data): void
     {
-        App::resolve(Database::class)->query('update tasks set title = :title where id = :id', [
+        $this->db->query('UPDATE tasks SET title = :title WHERE id = :id', [
             'id' => $data['id'],
             'title' => $data['title'],
         ]);
