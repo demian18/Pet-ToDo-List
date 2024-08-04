@@ -18,12 +18,11 @@ $router->get('/profile', [\Http\controllers\ProfileController::class, 'index'])-
 $router->get('/edit-profile', [\Http\controllers\ProfileController::class, 'edit'])->only('auth');
 $router->patch('/update-profile', [\Http\controllers\ProfileController::class, 'update'])->only('auth');
 
-$router->post('/update-task-status', '/task-handl.php')->only('auth');
+$router->post('/update-task-status', [\Http\controllers\ActionController::class, 'task_handl'])->only('auth');
+$router->post('/help-task', [\Http\controllers\ActionController::class, 'help_task'])->only('auth');
+$router->post('/cancel-task', [\Http\controllers\ActionController::class, 'cancel_task'])->only('auth');
 
 $router->post('/filter-tasks', '/filter-tasks.php')->only('auth');
-
-$router->post('/help-task', '/help-tasks.php')->only('auth');
-$router->post('/cancel-task', '/cancel-task.php')->only('auth');
 
 $router->post('/get-notifications', '/get-notifications.php')->only('auth');
 

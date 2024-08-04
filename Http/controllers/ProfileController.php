@@ -13,18 +13,28 @@ use Http\Forms\ProfileForm;
 
 class ProfileController
 {
-    public function index(): void
+    private User $userService;
+    private Stat $statService;
+
+    public function __construct()
+    {
+        $this->userService = new User(App::resolve(UserRepository::class));
+        $this->statService = new Stat(App::resolve(StatRepository::class));
+    }
+
+    private function getUserFromSession(): ?\Models\User
     {
         $session_user = Session::get('user');
         $email = $session_user['email'];
+        return $this->userService->findByEmail($email);
+    }
 
-        $userService = new User(App::resolve(UserRepository::class));
-        $statService = new Stat(App::resolve(StatRepository::class));
-
-        $user = $userService->findByEmail($email);
+    public function index(): void
+    {
+        $user = $this->getUserFromSession();
         $user_id = $user->getId();
 
-        $finTasks = $statService->finishedTask($user_id);
+        $finTasks = $this->statService->finishedTask($user_id);
 
         $cpmTasks = 0;
         $cndTasks = 0;
@@ -57,12 +67,7 @@ class ProfileController
 
     public function edit(): void
     {
-        $session_user = Session::get('user');
-        $email = $session_user['email'];
-
-        $userService = new User(App::resolve(UserRepository::class));
-
-        $user = $userService->findByEmail($email);
+        $user = $this->getUserFromSession();
 
         view('profile/edit.view.php', [
             'user' => $user
@@ -73,8 +78,7 @@ class ProfileController
     {
         $id = $_POST['id'];
 
-        $userService = new User(App::resolve(UserRepository::class));
-        $user = $userService->editUser($id);
+        $user = $this->userService->editUser($id);
 
         $form = new ProfileForm($_POST);
 
@@ -99,9 +103,9 @@ class ProfileController
 
             $filePath = $uploadDir . $fileName;
 
-            $userService->updatePhoto($id, $fileName);
+            $this->userService->updatePhoto($id, $fileName);
         }
-        $userService->update($_POST);
+        $this->userService->update($_POST);
         header('Location: /profile');
         exit();
     }
