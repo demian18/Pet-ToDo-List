@@ -14,9 +14,9 @@ $router->get('/login', [\Http\controllers\UserController::class, 'create_session
 $router->post('/session', [\Http\controllers\UserController::class, 'login'])->only('guest');
 $router->delete('/session', [\Http\controllers\UserController::class, 'logout'])->only('auth');
 
-$router->get('/profile', '/profile/index.php')->only('auth');
-$router->get('/edit-profile', '/profile/edit.php')->only('auth');
-$router->patch('/update-profile', '/profile/update.php')->only('auth');
+$router->get('/profile', [\Http\controllers\ProfileController::class, 'index'])->only('auth');
+$router->get('/edit-profile', [\Http\controllers\ProfileController::class, 'edit'])->only('auth');
+$router->patch('/update-profile', [\Http\controllers\ProfileController::class, 'update'])->only('auth');
 
 $router->post('/update-task-status', '/task-handl.php')->only('auth');
 

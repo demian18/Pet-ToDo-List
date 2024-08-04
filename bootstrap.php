@@ -3,6 +3,8 @@
 use Core\App;
 use Core\Container;
 use Core\Database;
+use Core\Repository\ProfileRepository;
+use Core\Repository\StatRepository;
 use Core\Repository\TaskRepository;
 use Core\Repository\UserRepository;
 
@@ -22,6 +24,10 @@ App::bind(UserRepository::class, function() {
 
 App::bind(TaskRepository::class, function() {
     return new TaskRepository(App::resolve(Database::class));
+});
+
+App::bind(StatRepository::class, function() {
+    return new StatRepository(App::resolve(Database::class));
 });
 
 /*$container->bind('logger', function() {

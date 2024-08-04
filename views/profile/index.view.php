@@ -14,18 +14,20 @@
             <div class="px-6 py-4 flex justify-between items-center">
                 <div>
                     <h3 class="text-lg font-semibold">Name</h3>
-                    <?php if (isset($user['name'])) : ?>
-                        <p class="text-gray-600"><?= $user['name'] ?></p>
+                    <?php if (isset($user)) : ?>
+                        <p class="text-gray-600"><?= $user->getName() ?></p>
                     <?php endif; ?>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold">Username</h3>
-                    <?php if (isset($user['username'])) : ?>
-                        <p class="text-gray-600"><?= $user['username'] ?></p>
+                    <?php if (isset($user)) : ?>
+                        <p class="text-gray-600"><?= $user->getUsername() ?></p>
                     <?php endif; ?>
                 </div>
                 <a href="/edit-profile"
-                   class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                   class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm
+                   hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2
+                   focus-visible:outline-indigo-600">
                     Update profile
                 </a>
             </div>

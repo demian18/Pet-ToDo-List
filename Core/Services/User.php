@@ -27,4 +27,19 @@ class User
     {
         return $this->userRepo->getWorkers();
     }
+
+    public function editUser($id)
+    {
+        return $this->userRepo->edit($id);
+    }
+
+    public function update($data): void
+    {
+        $this->userRepo->updateProfile($data);
+    }
+
+    public function updatePhoto($id, $fileName): void
+    {
+        $this->userRepo->updateProfilePhoto($id, $fileName);
+    }
 }
