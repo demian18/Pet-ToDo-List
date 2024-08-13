@@ -36,4 +36,9 @@ class StatRepository
     {
         Task::where('id', $taskId)->update(['status_id' => 4]);
     }
+
+    public function update_stat_cancel($taskId): void
+    {
+        Stat::where('id', $taskId)->update(['status_id' => 3]);
+    }
 }

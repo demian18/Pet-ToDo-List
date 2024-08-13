@@ -67,4 +67,24 @@ class Task
     {
         return $this->taskRepo->get_canceled($status, $user_id);
     }
+
+    public function get_task_admin($user_id)
+    {
+        return $this->taskRepo->get_task_admin($user_id);
+    }
+
+    public function get_task_assignee($taskId)
+    {
+        return $this->taskRepo->get_task_assignee($taskId);
+    }
+
+    public function update_status_canceled($taskId): void
+    {
+        $this->taskRepo->update_status_canceled($taskId);
+    }
+
+    public function get_status_task($taskId)
+    {
+        return $this->taskRepo->get_status_task($taskId);
+    }
 }

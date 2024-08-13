@@ -13,7 +13,8 @@ class TaskRepository
 
     public function getTasksWorker($user_id)
     {
-        return Task::select('tasks.id as task_id', 'tasks.title', 'tasks.body', 'tasks.status_id', 'tasks.assignee_id', 'tasks.creator_id')
+        return Task::select('tasks.id as task_id', 'tasks.title', 'tasks.body', 'tasks.status_id', 'tasks.assignee_id',
+            'tasks.creator_id', 'status.status as status_name')
             ->leftJoin('status', 'status.id', '=', 'tasks.status_id')
             ->where('tasks.assignee_id', $user_id)
             ->get();
@@ -89,5 +90,38 @@ class TaskRepository
             ->where('status.status', $status)
             ->where('tasks.assignee_id', $user_id)
             ->get();
+    }
+
+    public function get_task_admin($user_id)
+    {
+        return Task::select(
+            'tasks.id as task_id',
+            'tasks.title as task_title',
+            'status.status as task_status',
+            'users.email as user_email'
+        )
+            ->join('users', 'tasks.assignee_id', '=', 'users.id')
+            ->join('status', 'tasks.status_id', '=', 'status.id')
+            ->where('tasks.creator_id', $user_id)
+            ->get();
+    }
+
+    public function get_task_assignee($taskId)
+    {
+        return Task::select('status_id', 'assignee_id')
+            ->where('id', $taskId)
+            ->first();
+    }
+
+    public function update_status_canceled($taskId): void
+    {
+        Task::where('id', $taskId)->update(['status_id' => 3]);
+    }
+
+    public function get_status_task($taskId)
+    {
+        return Task::select('status_id')
+            ->where('id', $taskId)
+            ->first();
     }
 }

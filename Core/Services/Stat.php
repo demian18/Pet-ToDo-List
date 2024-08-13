@@ -32,4 +32,9 @@ class Stat
     {
         $this->statRepo->status_cancel($taskId, $user_id);
     }
+
+    public function update_status_cancel($taskId): void
+    {
+        $this->statRepo->update_stat_cancel($taskId);
+    }
 }

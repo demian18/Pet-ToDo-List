@@ -31,5 +31,5 @@ $router->post('/close-notice', [\Http\controllers\NotificationController::class,
 $router->get('/task-comments', [\Http\controllers\CommentController::class, 'index'])->only('auth');
 $router->post('/create-comment', [\Http\controllers\CommentController::class, 'create'])->only('auth');
 
-$router->get('/tasks', '/admin/index.php')->only('auth');
-$router->post('/cancel-task-admin', '/admin/cancel-task.php')->only('auth');
+$router->get('/tasks', [\Http\controllers\AdminController::class, 'index'])->only('auth');
+$router->post('/cancel-task-admin', [\Http\controllers\AdminController::class, 'cancel'])->only('auth');
