@@ -57,7 +57,7 @@
                                                 </button>
                                             </div>
                                             <?php if (isset($errors['title'])) : ?>
-                                                <p class="text-red-500 text-xs mt-2"><?= htmlspecialchars($errors['title']) ?></p>
+                                                <p class="text-red-500 text-xs mt-2"><?= htmlspecialchars($errors['title'][0] ?? '') ?></p>
                                             <?php endif; ?>
                                         </div>
                                     </div>

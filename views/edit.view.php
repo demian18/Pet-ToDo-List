@@ -28,8 +28,29 @@
                                             Update
                                         </button>
                                     </div>
+                                    <?php if (isset($users)): ?>
+                                        <div class="sm:col-span-4">
+                                            <label for="assignee"
+                                                   class="block text-sm font-medium leading-6 text-gray-900">Assign
+                                                to</label>
+                                            <div class="mt-2">
+                                                <select id="assignee" name="assignee" required
+                                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                                                    <option value="" disabled selected>Select a worker</option>
+                                                    <?php foreach ($users as $user) : ?>
+                                                        <option value="<?= $user['id'] ?>"><?= $user['email'] ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                            <?php if (isset($errors['assignee'])) : ?>
+                                                <p class="text-red-500 text-xs mt-2"><?= htmlspecialchars($errors['assignee']) ?></p>
+                                            <?php endif; ?>
+                                        </div>
+                                    <?php else : ?>
+                                        <p>Oops, there are no tasks yet...</p>
+                                    <?php endif; ?>
                                     <?php if (isset($errors['title'])) : ?>
-                                        <p class="text-red-500 text-xs mt-2"><?= $errors['title'] ?></p>
+                                        <p class="text-red-500 text-xs mt-2"><?= htmlspecialchars($errors['title'][0] ?? '') ?></p>
                                     <?php endif; ?>
                                 </div>
                             </div>

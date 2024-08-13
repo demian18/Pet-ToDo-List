@@ -43,6 +43,7 @@ class TaskRepository
     {
         Task::where('id', $data['id'])->update([
             'title' => $data['title'],
+            'assignee_id' => $data['assignee']
         ]);
     }
 

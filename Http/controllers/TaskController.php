@@ -93,9 +93,12 @@ class TaskController
 
         $taskService = new Task(App::resolve(TaskRepository::class));
         $task = $taskService->edit((int)$id);
+        $userService = new User(App::resolve(UserRepository::class));
+        $users = $userService->getWorkers();
 
         view("edit.view.php", [
-            'task' => $task
+            'task' => $task,
+            'users' => $users
         ]);
     }
 

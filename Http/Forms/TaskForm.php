@@ -2,25 +2,35 @@
 
 namespace Http\Forms;
 
-use Core\Validator;
+use Core\App;
 
 class TaskForm
 {
     private $data;
     private $errors = [];
+    private $validator;
 
     public function __construct($data)
     {
         $this->data = $data;
+        $this->validator = App::resolve('validationFactory');
     }
 
     public function validate()
     {
-        if (!Validator::string($this->data['title'], 5, 25)) {
-            $this->errors['title'] = 'Title must be between 5 and 25 characters!';
+        $rules = [
+            'title' => 'required|string|min:5|max:25',
+            'assignee' => 'required',
+        ];
+
+        $validator = $this->validator->make($this->data, $rules);
+
+        if ($validator->fails()) {
+            $this->errors = $validator->errors()->toArray();
+            return false;
         }
 
-        return empty($this->errors);
+        return true;
     }
     public function errors()
     {
