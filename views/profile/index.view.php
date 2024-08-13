@@ -14,14 +14,14 @@
             <div class="px-6 py-4 flex justify-between items-center">
                 <div>
                     <h3 class="text-lg font-semibold">Name</h3>
-                    <?php if (isset($user)) : ?>
-                        <p class="text-gray-600"><?= $user->getName() ?></p>
+                    <?php if (isset($user->name)) : ?>
+                        <p class="text-gray-600"><?= $user->name ?></p>
                     <?php endif; ?>
                 </div>
                 <div>
                     <h3 class="text-lg font-semibold">Username</h3>
-                    <?php if (isset($user)) : ?>
-                        <p class="text-gray-600"><?= $user->getUsername() ?></p>
+                    <?php if (isset($user->username)) : ?>
+                        <p class="text-gray-600"><?= $user->username ?></p>
                     <?php endif; ?>
                 </div>
                 <a href="/edit-profile"

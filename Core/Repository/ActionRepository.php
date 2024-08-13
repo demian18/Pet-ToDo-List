@@ -3,42 +3,31 @@
 namespace Core\Repository;
 
 use Core\Database;
+use Models\Task;
 
 class ActionRepository
 {
-    protected Database $db;
-
-    public function __construct(Database $db)
-    {
-        $this->db = $db;
-    }
-
     public function update_task_status($taskId): void
     {
-        $this->db->query('UPDATE tasks SET status_id = 1 WHERE id = :id', [
-            'id' => $taskId
+        Task::where('id', $taskId)->update([
+            'status_id' => 1
         ]);
     }
 
     public function find_creator_task($taskId)
     {
-        return $this->db->query('SELECT creator_id FROM tasks WHERE id = :id', [
-            'id' => $taskId
-        ])->findOrFail();
+        return Task::select('creator_id')->where('id', $taskId)->first();
     }
 
     public function select_status($taskId)
     {
-        return $this->db->query('SELECT status_id FROM tasks WHERE id = :id', [
-            'id' => $taskId
-        ])->findOrFail();
+        return Task::select('status_id')->where('id', $taskId)->first();
     }
 
     public function status_cancel($taskId): void
     {
-        $this->db->query('UPDATE tasks SET status_id = :status_id WHERE id = :task_id', [
-            'status_id' => 3,
-            'task_id' => $taskId,
+        Task::where('id', $taskId)->update([
+            'status_id' => 3
         ]);
     }
 }

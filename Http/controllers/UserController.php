@@ -53,7 +53,6 @@ class UserController
             $form->error('email', 'No matching account find for that email address and password.'
             )->throw();
         }
-
         redirect('/');
     }
 

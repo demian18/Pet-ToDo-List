@@ -29,8 +29,7 @@ class Auth
     public function attempt($email, $password): bool
     {
         $user = $this->userRepo->findByEmail($email);
-
-        if ($user && password_verify($password, $user->getPassword())) {
+        if ($user && password_verify($password, $user->password)) {
             $this->login([
                 'email' => $email
             ]);

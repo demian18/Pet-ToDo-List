@@ -2,80 +2,54 @@
 
 namespace Core\Repository;
 
-use Core\App;
-use Core\Database;
 use Models\User;
 
 class UserRepository
 {
-    protected $db;
-
-    public function __construct(Database $db)
-    {
-        $this->db = $db;
-    }
-
     public function findByEmail($email): ?User
     {
-        $data = $this->db->query('SELECT * FROM users WHERE email = :email', [
-            'email' => $email
-        ])->find();
-
-        if ($data) {
-            return new User($data['id'], $data['name'], $data['email'], $data['password'], $data['username'], $data['role_id'],
-                $data['picture'], $data['period']);
-        }
-
-        return null;
+        return User::where('email', $email)->first();
     }
 
     public function findUser($email): ?User
     {
-        $data = $this->db->query('SELECT id, role_id FROM users WHERE email = :email', [
-            'email' => $email
-        ])->findOrFail();
+        $user = User::select('id', 'role_id')
+            ->where('email', $email)
+            ->first();
 
-        if ($data) {
-            return new User($data['id'], null, null, null, null, $data['role_id'],
-                null, null);
-        }
-
-        return null;
+        return $user;
     }
 
-    public function create($email, $password): Database
+    public function create($email, $password): User
     {
-        return $this->db->query('INSERT INTO users (email, password) VALUES (:email, :password)', [
+        $user = User::create([
             'email' => $email,
-            'password' => password_hash($password, PASSWORD_BCRYPT),
+            'password' => password_hash($password, PASSWORD_BCRYPT)
         ]);
+        return $user;
     }
 
     public function getWorkers()
     {
-        return $this->db->query('SELECT id, email FROM users WHERE role_id != 2')->get();
+        return User::where('role_id', '!=', 2)->get(['id', 'email']);
     }
 
     public function edit($id)
     {
-        return $this->db->query('SELECT * FROM users WHERE id = :id', [
-            'id' => $id
-        ])->findOrFail();
+        return User::where('id', $id)->first();
     }
+
     public function updateProfile($data): void
     {
-        App::resolve(Database::class)->query('update users set email = :email, name = :name, username = :username where id = :id', [
-            'id' => $data['id'],
+        User::where('id', $data['id'])->update([
             'email' => $data['email'],
             'name' => $data['name'],
-            'username' => $data['username'],
+            'username' => $data['username']
         ]);
     }
+
     public function updateProfilePhoto($id, $fileName): void
     {
-        App::resolve(Database::class)->query('UPDATE users SET picture = :picture WHERE id = :id', [
-            'picture' => $fileName,
-            'id' => $id,
-        ]);
+        User::where('id', $id)->update(['picture' => $fileName]);
     }
 }

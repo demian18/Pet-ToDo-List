@@ -31,13 +31,12 @@ class TaskController
 
             $user = $userService->findUser($email);
 
-            $user_id = $user->getId();
-            $role = $user->getRole_id();
+            $user_id = $user->id;
+            $role = $user->role_id;
 
             $taskService = new Task(App::resolve(TaskRepository::class));
 
-            if ($role == 2) { // Admin
-
+            if ($role == 2) {
                 $users = $userService->getWorkers();
 
                 $tasks = $taskService->getTasksAdmin($user_id);
@@ -81,7 +80,7 @@ class TaskController
         $taskService->create([
             'title' => $form->get('title'),
             'assignee_id' => $form->get('assignee'),
-            'creator_id' => $user->getId(),
+            'creator_id' => $user->id,
         ]);
 
         header('Location: /');

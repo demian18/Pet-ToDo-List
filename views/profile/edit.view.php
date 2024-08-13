@@ -9,13 +9,13 @@
             <h2 class="text-2xl font-semibold mb-6">Edit User</h2>
             <form method="POST" action="/update-profile" enctype="multipart/form-data">
                 <input type="hidden" name="_method" value="PATCH">
-                <input type="hidden" name="id" value="<?= $user->getId() ?>">
+                <input type="hidden" name="id" value="<?= $user->id ?>">
                 <div class="space-y-6">
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                         <input type="email" name="email" id="email" required
                                class="block w-full flex-grow rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                               value="<?= htmlspecialchars($user->getEmail(), ENT_QUOTES, 'UTF-8') ?>">
+                               value="<?= htmlspecialchars($user->email, ENT_QUOTES, 'UTF-8') ?>">
                     </div>
 
                     <div>
@@ -28,8 +28,8 @@
                         <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
                         <input type="text" name="name" id="name" required
                                class="block w-full flex-grow rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                            <?php if (isset($user->getName)) : ?>
-                                value="<?= htmlspecialchars($user->getName(), ENT_QUOTES, 'UTF-8') ?>"
+                            <?php if (isset($user->name)) : ?>
+                                value="<?= htmlspecialchars($user->name, ENT_QUOTES, 'UTF-8') ?>"
                             <?php endif; ?>>
                         <?php if (isset($errors['name'])) : ?>
                             <p class="text-red-500 text-xs mt-2"><?= $errors['name'] ?></p>
@@ -41,7 +41,7 @@
                         <input type="text" name="username" id="username" required
                                class="block w-full flex-grow rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             <?php if (isset($user->username)) : ?>
-                                value="<?= htmlspecialchars($user->username(), ENT_QUOTES, 'UTF-8') ?>"
+                                value="<?= htmlspecialchars($user->username, ENT_QUOTES, 'UTF-8') ?>"
                             <?php endif; ?>>
                         <?php if (isset($errors['username'])) : ?>
                             <p class="text-red-500 text-xs mt-2"><?= $errors['username'] ?></p>

@@ -41,4 +41,9 @@ class Task
     {
         $this->taskRepo->deleteTask($id);
     }
+
+    public function updateStatus($taskId): void
+    {
+        $this->taskRepo->updateStatus($taskId);
+    }
 }

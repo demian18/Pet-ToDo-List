@@ -4,18 +4,24 @@ use Core\App;
 use Core\Container;
 use Core\Database;
 use Core\Repository\ActionRepository;
+use Core\Repository\CommentRepository;
 use Core\Repository\NotificationsRepository;
-use Core\Repository\ProfileRepository;
 use Core\Repository\StatRepository;
 use Core\Repository\TaskRepository;
 use Core\Repository\UserRepository;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 $container = new Container();
 
 $container->bind('Core\Database', function (){
     $config = require base_path('config.php');
 
-    return new Database($config['database']);
+    $capsule = new Capsule;
+    $capsule->addConnection($config['database']);
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+
+    return $capsule;
 });
 
 App::setContainer($container);
@@ -38,6 +44,10 @@ App::bind(ActionRepository::class, function() {
 
 App::bind(NotificationsRepository::class, function() {
     return new NotificationsRepository(App::resolve(Database::class));
+});
+
+App::bind(CommentRepository::class, function() {
+    return new CommentRepository(App::resolve(Database::class));
 });
 /*$container->bind('logger', function() {
     $config = require base_path('config/log.php');

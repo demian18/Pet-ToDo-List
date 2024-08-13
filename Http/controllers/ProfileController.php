@@ -4,6 +4,7 @@ namespace Http\controllers;
 
 use Core\App;
 use Core\Repository\StatRepository;
+use Core\Repository\TaskRepository;
 use Core\Repository\UserRepository;
 use Core\Services\Stat;
 use Core\Services\User;
@@ -32,7 +33,7 @@ class ProfileController
     public function index(): void
     {
         $user = $this->getUserFromSession();
-        $user_id = $user->getId();
+        $user_id = $user->id;
 
         $finTasks = $this->statService->finishedTask($user_id);
 
@@ -47,10 +48,10 @@ class ProfileController
         }
 
         $carbon = Carbon::today();
-        $userPeriod = Carbon::parse($user->getPeriod());
+        $userPeriod = Carbon::parse($user->period);
         $time = $userPeriod->diffForHumans();
 
-        $userPhoto = $user->getPicture();
+        $userPhoto = $user->picture;
 
         $defaultPhoto = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
 

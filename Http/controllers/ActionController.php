@@ -41,7 +41,7 @@ class ActionController
                 $this->actionService->update_task_status($taskId);
 
                 $user = $this->getUserFromSession();
-                $user_id = $user->getId();
+                $user_id = $user->id;
 
                 $statService = new Stat(App::resolve(StatRepository::class));
                 $statService->new_stat($taskId, $user_id);
@@ -64,7 +64,7 @@ class ActionController
                 $creator_id = $creator['creator_id'];
 
                 $user = $this->getUserFromSession();
-                $user_id = $user->getId();
+                $user_id = $user->id;
 
                 $notService = new Notifications(App::resolve(NotificationsRepository::class));
                 $notifications = $notService->get_not_id($taskId);
@@ -98,7 +98,7 @@ class ActionController
                     $this->actionService->status_cancel($taskId);
 
                     $user = $this->getUserFromSession();
-                    $user_id = $user->getId();
+                    $user_id = $user->id;
 
                     $statService = new Stat(App::resolve(StatRepository::class));
                     $statService->status_cancel($taskId, $user_id);

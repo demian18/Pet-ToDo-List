@@ -2,7 +2,9 @@
 
 use Core\App;
 use Core\Database;
+use Core\Repository\NotificationsRepository;
 use Core\Repository\UserRepository;
+use Core\Services\Notifications;
 use Core\Services\User;
 use Core\Session;
 
@@ -13,13 +15,12 @@ $db = App::resolve(Database::class);
 
 $userService = new User(App::resolve(UserRepository::class));
 $user = $userService->findByEmail($email);
-$user_id = $user->getId();
+$user_id = $user->id;
 
-$notification_count = $db->query('SELECT COUNT(*) as count FROM notifications WHERE assignee_id = :assignee_id AND status = "new"', [
-    'assignee_id' => $user_id
-])->findOrFail();
+$notService = new Notifications(App::resolve(NotificationsRepository::class));
+$notification_count = $notService->get_count_not($user_id);
 
 header('Content-Type: application/json');
 echo json_encode([
-    'count' => $notification_count['count'],
+    'count' => $notification_count,
 ]);
