@@ -10,6 +10,9 @@ use Core\Repository\StatRepository;
 use Core\Repository\TaskRepository;
 use Core\Repository\UserRepository;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Illuminate\Translation\Translator;
+use Illuminate\Translation\ArrayLoader;
+use Illuminate\Validation\Factory;
 
 $container = new Container();
 
@@ -25,6 +28,14 @@ $container->bind('Core\Database', function (){
 });
 
 App::setContainer($container);
+
+$loader = new ArrayLoader();
+$translator = new Translator($loader, 'en');
+$validationFactory = new Factory($translator);
+
+App::bind('validationFactory', function() use ($validationFactory) {
+    return $validationFactory;
+});
 
 App::bind(UserRepository::class, function() {
     return new UserRepository(App::resolve(Database::class));
