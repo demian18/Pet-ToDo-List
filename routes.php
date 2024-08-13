@@ -22,7 +22,7 @@ $router->post('/update-task-status', [\Http\controllers\ActionController::class,
 $router->post('/help-task', [\Http\controllers\ActionController::class, 'help_task'])->only('auth');
 $router->post('/cancel-task', [\Http\controllers\ActionController::class, 'cancel_task'])->only('auth');
 
-$router->post('/filter-tasks', '/filter-tasks.php')->only('auth');
+$router->post('/filter-tasks', [\Http\controllers\FilterController::class, 'get'])->only('auth');
 
 $router->post('/get-notifications', '/get-notifications.php')->only('auth');
 

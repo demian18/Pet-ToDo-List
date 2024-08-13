@@ -22,6 +22,7 @@ class Task
     {
         return $this->taskRepo->getTasksWorker($user_id);
     }
+
     public function create($data): void
     {
         $this->taskRepo->createTask($data);
@@ -45,5 +46,25 @@ class Task
     public function updateStatus($taskId): void
     {
         $this->taskRepo->updateStatus($taskId);
+    }
+
+    public function get_all($user_id)
+    {
+        return $this->taskRepo->get_all($user_id);
+    }
+
+    public function get_completed($status, $user_id)
+    {
+        return $this->taskRepo->get_completed($status, $user_id);
+    }
+
+    public function get_help($status, $user_id)
+    {
+        return $this->taskRepo->get_help($status, $user_id);
+    }
+
+    public function get_canceled($status, $user_id)
+    {
+        return $this->taskRepo->get_canceled($status, $user_id);
     }
 }

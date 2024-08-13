@@ -51,4 +51,43 @@ class TaskRepository
             'status_id' => 2
         ]);
     }
+
+    public function get_all($user_id)
+    {
+        return Task::select('tasks.id as task_id', 'tasks.title', 'tasks.body', 'tasks.status_id', 'tasks.assignee_id',
+            'tasks.creator_id', 'status.status as status_name')
+            ->leftJoin('status', 'status.id', '=', 'tasks.status_id')
+            ->where('tasks.assignee_id', $user_id)
+            ->get();
+    }
+
+    public function get_completed($status, $user_id)
+    {
+        return Task::select('tasks.id as task_id', 'tasks.title', 'tasks.body', 'tasks.status_id', 'tasks.assignee_id',
+            'tasks.creator_id', 'status.status as status_name')
+            ->leftJoin('status', 'status.id', '=', 'tasks.status_id')
+            ->where('status.status', $status)
+            ->where('tasks.assignee_id', $user_id)
+            ->get();
+    }
+
+    public function get_help($status, $user_id)
+    {
+        return Task::select('tasks.id as task_id', 'tasks.title', 'tasks.body', 'tasks.status_id', 'tasks.assignee_id',
+            'tasks.creator_id', 'status.status as status_name')
+            ->leftJoin('status', 'status.id', '=', 'tasks.status_id')
+            ->where('status.status', $status)
+            ->where('tasks.assignee_id', $user_id)
+            ->get();
+    }
+
+    public function get_canceled($status, $user_id)
+    {
+        return Task::select('tasks.id as task_id', 'tasks.title', 'tasks.body', 'tasks.status_id', 'tasks.assignee_id',
+            'tasks.creator_id', 'status.status as status_name')
+            ->leftJoin('status', 'status.id', '=', 'tasks.status_id')
+            ->where('status.status', $status)
+            ->where('tasks.assignee_id', $user_id)
+            ->get();
+    }
 }
