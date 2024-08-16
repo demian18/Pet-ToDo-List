@@ -2,30 +2,37 @@
 
 namespace Http\Forms;
 
-use Core\Validator;
+use Core\App;
 
 class ProfileForm
 {
     private $data;
     private $errors = [];
+    private $validator;
 
     public function __construct($data)
     {
         $this->data = $data;
+        $this->validator = App::resolve('validationFactory');
     }
 
     public function validate()
     {
-        if (!Validator::string($this->data['name'], 3, 15)) {
-            $this->errors['name'] = 'Name must be between 3 and 15 characters!';
+        $rules = [
+            'name' => 'required|string|min:3|max:15',
+            'username' => 'required|min:3|max:15',
+        ];
+
+        $validator = $this->validator->make($this->data, $rules);
+
+        if ($validator->fails()) {
+            $this->errors = $validator->errors()->toArray();
+            return false;
         }
 
-        if (!Validator::string($this->data['username'], 3, 15)) {
-            $this->errors['username'] = 'Username must be between 3 and 15 characters!';
-        }
-
-        return empty($this->errors);
+        return true;
     }
+
     public function errors()
     {
         return $this->errors;

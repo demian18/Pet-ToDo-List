@@ -32,7 +32,7 @@
                                 value="<?= htmlspecialchars($user->name, ENT_QUOTES, 'UTF-8') ?>"
                             <?php endif; ?>>
                         <?php if (isset($errors['name'])) : ?>
-                            <p class="text-red-500 text-xs mt-2"><?= $errors['name'] ?></p>
+                            <p class="text-red-500 text-xs mt-2"><?= htmlspecialchars($errors['name'][0] ?? '') ?></p>
                         <?php endif; ?>
                     </div>
 
@@ -44,7 +44,7 @@
                                 value="<?= htmlspecialchars($user->username, ENT_QUOTES, 'UTF-8') ?>"
                             <?php endif; ?>>
                         <?php if (isset($errors['username'])) : ?>
-                            <p class="text-red-500 text-xs mt-2"><?= $errors['username'] ?></p>
+                            <p class="text-red-500 text-xs mt-2"><?= htmlspecialchars($errors['username'][0] ?? '') ?></p>
                         <?php endif; ?>
                     </div>
 

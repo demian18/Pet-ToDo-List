@@ -88,6 +88,7 @@ class ProfileController
                 'user' => $user
             ]);
         }
+
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
             $file = $_FILES['photo'];
             $allowedExtensions = ['jpg', 'jpeg', 'png'];
