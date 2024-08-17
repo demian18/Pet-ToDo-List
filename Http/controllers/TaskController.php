@@ -12,34 +12,38 @@ use Http\Forms\TaskForm;
 
 class TaskController
 {
+    private User $userService;
+    private Task $taskService;
+
+    public function __construct()
+    {
+        $this->userService = new User(App::resolve(UserRepository::class));
+        $this->taskService = new Task(App::resolve(TaskRepository::class));
+    }
+
+    private function getUserFromSession(): ?\Models\User
+    {
+        $session_user = Session::get('user');
+        $email = $session_user['email'];
+        return $this->userService->findByEmail($email);
+    }
+
     public function index()
     {
         $errors = [];
         if (isset($_GET['errors'])) {
             $errors = json_decode($_GET['errors'], true);
         }
-
-        $userService = new User(App::resolve(UserRepository::class));
-
-        $session_user = Session::get('user');
-
-        if ($session_user == null) {
+        $user = $this->getUserFromSession();
+        if ($user == null) {
             view("index.view.php");
             exit();
         } else {
-            $email = $session_user['email'];
-
-            $user = $userService->findUser($email);
-
             $user_id = $user->id;
             $role = $user->role_id;
-
-            $taskService = new Task(App::resolve(TaskRepository::class));
-
             if ($role == 2) {
-                $users = $userService->getWorkers();
-
-                $tasks = $taskService->getTasksAdmin($user_id);
+                $users = $this->userService->getWorkers();
+                $tasks = $this->taskService->getTasksAdmin($user_id);
 
                 view("index.view.php", [
                     'errors' => $errors,
@@ -49,7 +53,7 @@ class TaskController
                     'user_id' => $user_id,
                 ]);
             } elseif ($role == 1) { // Worker
-                $tasks = $taskService->getTasksWorker($user_id);
+                $tasks = $this->taskService->getTasksWorker($user_id);
 
                 view("index.view.php", [
                     'errors' => $errors,
@@ -63,25 +67,17 @@ class TaskController
 
     public function create()
     {
-        $form = new TaskForm($_POST);
+        $user = $this->getUserFromSession();
+
+        $form = new TaskForm($_POST, $user->id);
 
         if (!$form->validate()) {
             $errorParams = http_build_query(['errors' => json_encode($form->errors())]);
             header("Location: /?$errorParams");
             exit();
         }
-        $session_user = Session::get('user');
-        $email = $session_user['email'];
 
-        $userService = new User(App::resolve(UserRepository::class));
-        $user = $userService->findByEmail($email);
-
-        $taskService = new Task(App::resolve(TaskRepository::class));
-        $taskService->create([
-            'title' => $form->get('title'),
-            'assignee_id' => $form->get('assignee'),
-            'creator_id' => $user->id,
-        ]);
+        $this->taskService->create($form);
 
         header('Location: /');
         exit();
@@ -91,10 +87,8 @@ class TaskController
     {
         $id = $_GET['id'];
 
-        $taskService = new Task(App::resolve(TaskRepository::class));
-        $task = $taskService->edit((int)$id);
-        $userService = new User(App::resolve(UserRepository::class));
-        $users = $userService->getWorkers();
+        $task = $this->taskService->edit((int)$id);
+        $users = $this->userService->getWorkers();
 
         view("edit.view.php", [
             'task' => $task,
@@ -104,19 +98,20 @@ class TaskController
 
     public function update()
     {
-        $taskService = new Task(App::resolve(TaskRepository::class));
+        $user = $this->getUserFromSession();
 
         $id = $_POST['id'];
-        $task = $taskService->edit($id);
+        $task = $this->taskService->edit($id);
 
-        $form = new TaskForm($_POST);
+        $form = new TaskForm($_POST, $user->id);
+
         if (!$form->validate()) {
             return view("edit.view.php", [
                 'errors' => $form->errors(),
                 'task' => $task
             ]);
         }
-        $taskService->update($_POST);
+        $this->taskService->update($form->getData());
 
         header('Location: /');
         exit();
@@ -126,8 +121,7 @@ class TaskController
     {
         $id = $_POST['id'];
 
-        $taskService = new Task(App::resolve(TaskRepository::class));
-        $taskService->delete($id);
+        $this->taskService->delete($id);
 
         header('Location: /');
         exit();

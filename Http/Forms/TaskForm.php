@@ -10,9 +10,10 @@ class TaskForm
     private $errors = [];
     private $validator;
 
-    public function __construct($data)
+    public function __construct($data, $creatorId)
     {
         $this->data = $data;
+        $this->data['creator_id'] = $creatorId;
         $this->validator = App::resolve('validationFactory');
     }
 
@@ -40,5 +41,10 @@ class TaskForm
     public function get($key)
     {
         return $this->data[$key] ?? null;
+    }
+
+    public function getData()
+    {
+        return $this->data;
     }
 }
