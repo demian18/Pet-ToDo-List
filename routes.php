@@ -24,10 +24,10 @@ $router->post('/cancel-task', [\Http\controllers\ActionController::class, 'cance
 
 $router->post('/filter-tasks', [\Http\controllers\FilterController::class, 'get'])->only('auth');
 
-$router->post('/get-notifications', '/get-notifications.php')->only('auth');
-
 $router->get('/notifications', [\Http\controllers\NotificationController::class, 'index'])->only('auth');
 $router->post('/close-notice', [\Http\controllers\NotificationController::class, 'close'])->only('auth');
+$router->post('/get-notifications', [\Http\controllers\NotificationController::class, 'getNotificationCount'])->only('auth');
+
 $router->get('/task-comments', [\Http\controllers\CommentController::class, 'index'])->only('auth');
 $router->post('/create-comment', [\Http\controllers\CommentController::class, 'create'])->only('auth');
 

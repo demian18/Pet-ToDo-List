@@ -106,7 +106,8 @@ return [
         return new NotificationController(
             App::resolve(User::class),
             App::resolve(Notifications::class),
-            App::resolve(Task::class)
+            App::resolve(Task::class),
+            App::resolve(Request::class)
         );
     },
 ];
