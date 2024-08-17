@@ -25,7 +25,7 @@ class TaskRepository
         Task::create([
             'title' => $data['title'],
             'creator_id' => $data['creator_id'],
-            'assignee_id' => $data['assignee_id']
+            'assignee_id' => $data['assignee']
         ]);
     }
 

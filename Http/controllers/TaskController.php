@@ -77,7 +77,7 @@ class TaskController
             exit();
         }
 
-        $this->taskService->create($form);
+        $this->taskService->create($form->getData());
 
         header('Location: /');
         exit();

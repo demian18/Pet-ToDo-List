@@ -1,7 +1,7 @@
 <?php
 
 use Core\Session;
-use Core\ValidationException;
+use Illuminate\Validation\ValidationException;
 
 require_once 'init.php';
 
@@ -15,8 +15,8 @@ $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 try {
     $router->route($uri, $method);
 } catch (ValidationException $exception) {
-    Session::flash('errors', $exception->errors);
-    Session::flash('old', $exception->old);
+    Session::flash('errors', $exception->validator->errors()->toArray());
+    Session::flash('old', $exception->validator->getData());
 
     return redirect($router->previousUrl());
 }
