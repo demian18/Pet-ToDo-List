@@ -37,8 +37,11 @@ class Request
     {
         return $_GET[$key] ?? $default;
     }
-    public function post($key, $default = null)
+    public function post($key = null, $default = null)
     {
+        if ($key === null) {
+            return $_POST;
+        }
         return $_POST[$key] ?? $default;
     }
 }

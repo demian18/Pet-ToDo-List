@@ -72,7 +72,8 @@ return [
     TaskController::class => function () {
         return new TaskController(
             App::resolve(User::class),
-            App::resolve(Task::class)
+            App::resolve(Task::class),
+            App::resolve(Request::class)
         );
     },
     ProfileController::class => function () {

@@ -5,6 +5,7 @@ namespace Http\controllers;
 use Core\App;
 use Core\Repository\TaskRepository;
 use Core\Repository\UserRepository;
+use Core\Request;
 use Core\Services\Task;
 use Core\Services\User;
 use Core\Session;
@@ -14,11 +15,13 @@ class TaskController
 {
     private User $userService;
     private Task $taskService;
+    private Request $request;
 
-    public function __construct(User $userService, Task $taskService)
+    public function __construct(User $userService, Task $taskService, Request $request)
     {
         $this->userService = $userService;
         $this->taskService = $taskService;
+        $this->request = $request;
     }
 
     private function getUserFromSession(): ?\Models\User
@@ -28,64 +31,86 @@ class TaskController
         return $this->userService->findByEmail($email);
     }
 
-    public function index()
+    private function handleErrors(): array
     {
         $errors = [];
-        if (isset($_GET['errors'])) {
-            $errors = json_decode($_GET['errors'], true);
+        if ($this->request->query('errors') !== null) {
+            $errors = json_decode($this->request->query('errors'), true);
         }
+        return $errors;
+    }
+
+    private function redirectWithErrors(array $errors): void
+    {
+        $errorParams = http_build_query(['errors' => json_encode($errors)]);
+        header("Location: /?$errorParams");
+        exit();
+    }
+
+    private function isAdmin(int $role): bool
+    {
+        return $role === 2;
+    }
+
+    private function isWorker(int $role): bool
+    {
+        return $role === 1;
+    }
+
+    public function index()
+    {
+        $errors = $this->handleErrors();
         $user = $this->getUserFromSession();
-        if ($user == null) {
+
+        if (!$user) {
             view("index.view.php");
             exit();
-        } else {
-            $user_id = $user->id;
-            $role = $user->role_id;
-            if ($role == 2) {
-                $users = $this->userService->getWorkers();
-                $tasks = $this->taskService->getTasksAdmin($user_id);
-
-                view("index.view.php", [
-                    'errors' => $errors,
-                    'tasks' => $tasks,
-                    'role' => $role,
-                    'users' => $users,
-                    'user_id' => $user_id,
-                ]);
-            } elseif ($role == 1) { // Worker
-                $tasks = $this->taskService->getTasksWorker($user_id);
-
-                view("index.view.php", [
-                    'errors' => $errors,
-                    'tasks' => $tasks,
-                    'role' => $role,
-                    'user_id' => $user_id,
-                ]);
-            }
         }
+
+        $user_id = $user->id;
+        $role = $user->role_id;
+
+        if ($this->isAdmin($role)) {
+            $users = $this->userService->getWorkers();
+            $tasks = $this->taskService->getTasksAdmin($user_id);
+        } elseif ($this->isWorker($role)) {
+            $tasks = $this->taskService->getTasksWorker($user_id);
+        } else {
+            $tasks = [];
+        }
+
+        view("index.view.php", [
+            'errors' => $errors,
+            'tasks' => $tasks,
+            'role' => $role,
+            'users' => $this->isAdmin($role) ? $users : null,
+            'user_id' => $user_id,
+        ]);
     }
 
     public function create()
     {
         $user = $this->getUserFromSession();
-
-        $form = new TaskForm($_POST, $user->id);
+        $postData = $this->request->post();
+        $form = new TaskForm($postData, $user->id);
 
         if (!$form->validate()) {
-            $errorParams = http_build_query(['errors' => json_encode($form->errors())]);
-            header("Location: /?$errorParams");
-            exit();
+            $this->redirectWithErrors($form->errors());
         }
 
         $this->taskService->create($form->getData());
-
         header('Location: /');
         exit();
     }
 
     public function edit(): void
     {
-        $id = $_GET['id'];
+        $id = $this->request->query('id') ?? null;
+
+        if (!$id) {
+            header('Location: /');
+            exit();
+        }
 
         $task = $this->taskService->edit((int)$id);
         $users = $this->userService->getWorkers();
@@ -99,11 +124,16 @@ class TaskController
     public function update()
     {
         $user = $this->getUserFromSession();
+        $id = $this->request->post('id') ?? null;
 
-        $id = $_POST['id'];
+        if (!$id) {
+            header('Location: /');
+            exit();
+        }
+
         $task = $this->taskService->edit($id);
-
-        $form = new TaskForm($_POST, $user->id);
+        $postData = $this->request->post();
+        $form = new TaskForm($postData, $user->id);
 
         if (!$form->validate()) {
             return view("edit.view.php", [
@@ -111,17 +141,19 @@ class TaskController
                 'task' => $task
             ]);
         }
-        $this->taskService->update($form->getData());
 
+        $this->taskService->update($form->getData());
         header('Location: /');
         exit();
     }
 
     public function delete()
     {
-        $id = $_POST['id'];
+        $id = $this->request->post('id') ?? null;
 
-        $this->taskService->delete($id);
+        if ($id) {
+            $this->taskService->delete($id);
+        }
 
         header('Location: /');
         exit();
