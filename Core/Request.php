@@ -33,12 +33,12 @@ class Request
     {
         return $this->method() === 'POST';
     }
-    public function query(): array
+    public function query($key, $default = null)
     {
-        return $_GET;
+        return $_GET[$key] ?? $default;
     }
-    public function post(): array
+    public function post($key, $default = null)
     {
-        return $_POST;
+        return $_POST[$key] ?? $default;
     }
 }

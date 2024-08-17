@@ -6,15 +6,16 @@ use Core\App;
 use Core\Repository\UserRepository;
 use Core\Services\Auth;
 use Core\Session;
+use Illuminate\Validation\Factory as ValidationFactory;
 
 class UserController
 {
-    private $validationFactory;
-    private $auth;
-    public function __construct()
+    private ValidationFactory $validationFactory;
+    private Auth $auth;
+    public function __construct(ValidationFactory $validationFactory, Auth $auth)
     {
-        $this->validationFactory = App::resolve('validationFactory');
-        $this->auth = new Auth(App::resolve(UserRepository::class));
+        $this->validationFactory = $validationFactory;
+        $this->auth = $auth;
     }
 
     public function create_register(): void

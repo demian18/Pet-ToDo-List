@@ -20,12 +20,12 @@ class ActionController
     private Stat $statService;
     private Notifications $notService;
 
-    public function __construct()
+    public function __construct(User $userService, Action $actionService, Stat $statService, Notifications $notService)
     {
-        $this->userService = new User(App::resolve(UserRepository::class));
-        $this->actionService = new Action(App::resolve(ActionRepository::class));
-        $this->statService = new Stat(App::resolve(StatRepository::class));
-        $this->notService = new Notifications(App::resolve(NotificationsRepository::class));
+        $this->userService = $userService;
+        $this->actionService = $actionService;
+        $this->statService = $statService;
+        $this->notService = $notService;
     }
 
     private function getUserFromSession(): ?\Models\User

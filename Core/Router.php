@@ -57,7 +57,7 @@ class Router
                     $controllerClass = $controller[0];
                     $controllerMethod = $controller[1];
 
-                    $controllerInstance = new $controllerClass();
+                    $controllerInstance = App::resolve($controllerClass);
                     return $controllerInstance->$controllerMethod();
                 }
                 return require base_path('Http/controllers' . $route['controller']);

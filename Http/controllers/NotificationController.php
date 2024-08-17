@@ -13,18 +13,26 @@ use Core\Session;
 
 class NotificationController
 {
+    private User $userService;
+    private Notifications $notService;
+    private Task $taskService;
+
+    public function __construct(User $userService, Notifications $notService, Task $taskService)
+    {
+        $this->userService = $userService;
+        $this->notService = $notService;
+        $this->taskService = $taskService;
+    }
+
     public function index()
     {
         $session_user = Session::get('user');
         $email = $session_user['email'];
 
-        $userService = new User(App::resolve(UserRepository::class));
-        $user = $userService->findUser($email);
+        $user = $this->userService->findUser($email);
         $user_id = $user->id;
 
-        $notService = new Notifications(App::resolve(NotificationsRepository::class));
-
-        $notifications = $notService->get_notifications($user_id);
+        $notifications = $this->notService->get_notifications($user_id);
 
         $unique_notifications = [];
 
@@ -50,11 +58,9 @@ class NotificationController
     {
         $taskId = $_POST['task_id'];
 
-        $notService = new Notifications(App::resolve(NotificationsRepository::class));
-        $notService->update_not_status_complete($taskId);
+        $this->notService->update_not_status_complete($taskId);
 
-        $notService = new Task(App::resolve(TaskRepository::class));
-        $notService->updateStatus($taskId);
+        $this->taskService->updateStatus($taskId);
 
         header('location: /notifications');
         exit();

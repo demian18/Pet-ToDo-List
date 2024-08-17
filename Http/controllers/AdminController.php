@@ -18,11 +18,11 @@ class AdminController
     private Task $taskService;
     private Request $request;
 
-    public function __construct()
+    public function __construct(User $userService, Task $taskService, Request $request)
     {
-        $this->userService = new User(App::resolve(UserRepository::class));
-        $this->taskService = new Task(App::resolve(TaskRepository::class));
-        $this->request = new Request();
+        $this->userService = $userService;
+        $this->taskService = $taskService;
+        $this->request = $request;
     }
 
     public function index(): void

@@ -16,10 +16,10 @@ class ProfileController
     private User $userService;
     private Stat $statService;
 
-    public function __construct()
+    public function __construct(User $userService, Stat $statService)
     {
-        $this->userService = new User(App::resolve(UserRepository::class));
-        $this->statService = new Stat(App::resolve(StatRepository::class));
+        $this->userService = $userService;
+        $this->statService = $statService;
     }
 
     private function getUserFromSession(): ?\Models\User

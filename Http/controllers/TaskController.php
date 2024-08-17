@@ -15,10 +15,10 @@ class TaskController
     private User $userService;
     private Task $taskService;
 
-    public function __construct()
+    public function __construct(User $userService, Task $taskService)
     {
-        $this->userService = new User(App::resolve(UserRepository::class));
-        $this->taskService = new Task(App::resolve(TaskRepository::class));
+        $this->userService = $userService;
+        $this->taskService = $taskService;
     }
 
     private function getUserFromSession(): ?\Models\User
