@@ -10,41 +10,49 @@ use Core\Services\Stat;
 use Core\Services\Task;
 use Core\Services\User;
 use Core\Session;
+use Core\Request;
 
 class AdminController
 {
-    public function index()
-    {
-        $userService = new User(App::resolve(UserRepository::class));
+    private User $userService;
+    private Task $taskService;
+    private Request $request;
 
+    public function __construct()
+    {
+        $this->userService = new User(App::resolve(UserRepository::class));
+        $this->taskService = new Task(App::resolve(TaskRepository::class));
+        $this->request = new Request();
+    }
+
+    public function index(): void
+    {
         $session_user = Session::get('user');
         $email = $session_user['email'];
 
-        $user = $userService->findByEmail($email);
+        $user = $this->userService->findByEmail($email);
         $user_id = $user->id;
 
-        $taskService = new Task(App::resolve(TaskRepository::class));
-        $tasks = $taskService->get_task_admin($user_id);
+        $tasks = $this->taskService->get_task_admin($user_id);
 
         view('admin/index.view.php', [
             "tasks" => $tasks
         ]);
     }
 
-    public function cancel()
+    public function cancel(): void
     {
-        $taskId = $_POST['id'];
+        $taskId = $this->request->post('id');
 
-        $taskService = new Task(App::resolve(TaskRepository::class));
-        $task = $taskService->get_task_assignee($taskId);
+        $task = $this->taskService->get_task_assignee($taskId);
 
         $statService = new Stat(App::resolve(StatRepository::class));
 
         if ($task['status_id'] != 3) {
 
-            $taskService->update_status_canceled($taskId);
+            $this->taskService->update_status_canceled($taskId);
 
-            $updatedTask = $taskService->get_status_task($taskId);
+            $updatedTask = $this->taskService->get_status_task($taskId);
             if ($updatedTask['status_id'] == 1) {
                 $statService->update_status_cancel($taskId);
             }
