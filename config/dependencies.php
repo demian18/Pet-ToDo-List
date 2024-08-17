@@ -15,6 +15,7 @@ use Core\Services\User;
 use Http\controllers\ActionController;
 use Http\controllers\AdminController;
 use Http\controllers\CommentController;
+use Http\controllers\FilterController;
 use Http\controllers\NotificationController;
 use Http\controllers\ProfileController;
 use Http\controllers\TaskController;
@@ -79,7 +80,8 @@ return [
     ProfileController::class => function () {
         return new ProfileController(
             App::resolve(User::class),
-            App::resolve(Stat::class)
+            App::resolve(Stat::class),
+            App::resolve(Request::class)
         );
     },
     ActionController::class => function () {
@@ -100,7 +102,8 @@ return [
     UserController::class => function () {
         return new UserController(
             App::resolve('validationFactory'),
-            App::resolve(Auth::class)
+            App::resolve(Auth::class),
+            App::resolve(Request::class)
         );
     },
     NotificationController::class => function () {
@@ -109,6 +112,12 @@ return [
             App::resolve(Notifications::class),
             App::resolve(Task::class),
             App::resolve(Request::class)
+        );
+    },
+    FilterController::class => function () {
+        return new FilterController(
+            App::resolve(User::class),
+            App::resolve(Task::class)
         );
     },
 ];

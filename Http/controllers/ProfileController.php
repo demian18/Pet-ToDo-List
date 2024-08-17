@@ -5,6 +5,7 @@ namespace Http\controllers;
 use Core\App;
 use Core\Repository\StatRepository;
 use Core\Repository\UserRepository;
+use Core\Request;
 use Core\Services\Stat;
 use Core\Services\User;
 use Core\Session;
@@ -15,11 +16,13 @@ class ProfileController
 {
     private User $userService;
     private Stat $statService;
+    private Request $request;
 
-    public function __construct(User $userService, Stat $statService)
+    public function __construct(User $userService, Stat $statService, Request $request)
     {
         $this->userService = $userService;
         $this->statService = $statService;
+        $this->request = $request;
     }
 
     private function getUserFromSession(): ?\Models\User
@@ -76,7 +79,7 @@ class ProfileController
 
     public function update()
     {
-        $id = $_POST['id'];
+        $id = $this->request->post('id');
 
         $user = $this->userService->editUser($id);
 
