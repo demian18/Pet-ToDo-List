@@ -17,9 +17,8 @@ A simple todo list application with basic features:
 - Middleware and Validation
 - Using and working with sessions
 
-## Version 2.0 (In Development)
+## Version 2.0
 An enhanced todo list application with additional features:
-- API integration
 - Role-based access control
 - Notifications
 - Creating a user profile, displaying statistics
