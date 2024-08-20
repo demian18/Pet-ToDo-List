@@ -4,24 +4,23 @@ namespace Http\Forms;
 
 use Core\App;
 
-class TaskForm
+class ProfileForm
 {
     private $data;
     private $errors = [];
     private $validator;
 
-    public function __construct($data, $creatorId)
+    public function __construct($data)
     {
         $this->data = $data;
-        $this->data['creator_id'] = $creatorId;
         $this->validator = App::resolve('validationFactory');
     }
 
     public function validate()
     {
         $rules = [
-            'title' => 'required|string|min:5|max:25',
-            'assignee' => 'required',
+            'name' => 'required|string|min:3|max:15',
+            'username' => 'required|min:3|max:15',
         ];
 
         $validator = $this->validator->make($this->data, $rules);
@@ -33,6 +32,7 @@ class TaskForm
 
         return true;
     }
+
     public function errors()
     {
         return $this->errors;
@@ -41,10 +41,5 @@ class TaskForm
     public function get($key)
     {
         return $this->data[$key] ?? null;
-    }
-
-    public function getData()
-    {
-        return $this->data;
     }
 }

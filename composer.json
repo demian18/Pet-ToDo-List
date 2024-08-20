@@ -3,7 +3,8 @@
   "autoload": {
     "psr-4": {
       "Core\\": "Core/",
-      "Http\\": "Http/"
+      "Http\\": "Http/",
+      "Models\\": "Models/"
     }
   },
   "require-dev": {
@@ -13,5 +14,12 @@
     "allow-plugins": {
       "pestphp/pest-plugin": true
     }
+  },
+  "require": {
+    "nesbot/carbon": "^2.72.5",
+    "dragonmantank/cron-expression": "^3.3",
+    "monolog/monolog": "^3.7",
+    "illuminate/database": "^10.48.19",
+    "illuminate/validation": "10.48.20"
   }
 }

@@ -1,17 +1,9 @@
 <?php
 
 use Core\Session;
-use Core\ValidationException;
+use Illuminate\Validation\ValidationException;
 
-const BASE_PATH = __DIR__ . '/../';
-
-require BASE_PATH . '/vendor/autoload.php';
-
-session_start();
-
-require BASE_PATH . 'Core/functions.php';
-
-require base_path('bootstrap.php');
+require_once 'init.php';
 
 $router = new \Core\Router();
 
@@ -23,8 +15,8 @@ $method = $_POST['_method'] ?? $_SERVER['REQUEST_METHOD'];
 try {
     $router->route($uri, $method);
 } catch (ValidationException $exception) {
-    Session::flash('errors', $exception->errors);
-    Session::flash('old', $exception->old);
+    Session::flash('errors', $exception->validator->errors()->toArray());
+    Session::flash('old', $exception->validator->getData());
 
     return redirect($router->previousUrl());
 }
