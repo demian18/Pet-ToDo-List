@@ -2,9 +2,6 @@
 
 namespace Http\controllers;
 
-use Core\App;
-use Core\Repository\TaskRepository;
-use Core\Repository\UserRepository;
 use Core\Request;
 use Core\Services\Task;
 use Core\Services\User;

@@ -2,9 +2,14 @@
 
 return [
     'database' => [
-        'host' => 'yourhost',
-        'port' => 'yourport(INT)',
-        'dbname' => 'yourdbname',
-        'charset' => 'yourcharset',
+        'driver' => '',
+        'host' => '',
+        'port' => '',
+        'database' => '',
+        'username' => '',
+        'password' => '',
+        'charset' => '',
+        'collation' => '',
+        'prefix' => '',
     ]
 ];
