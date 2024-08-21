@@ -33,3 +33,7 @@ $router->post('/create-comment', [\Http\controllers\CommentController::class, 'c
 
 $router->get('/tasks', [\Http\controllers\AdminController::class, 'index'])->only('auth');
 $router->post('/cancel-task-admin', [\Http\controllers\AdminController::class, 'cancel'])->only('auth');
+
+$router->get('/api/reports/overview', [\Http\controllers\ReportController::class, 'getOverview']);
+$router->get('/api/reports/user', [\Http\controllers\ReportController::class, 'getUserStats']);
+$router->get('/api/reports/performance', [\Http\controllers\ReportController::class, 'getPerformance']);

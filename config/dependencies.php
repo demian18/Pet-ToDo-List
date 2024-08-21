@@ -18,6 +18,7 @@ use Http\controllers\CommentController;
 use Http\controllers\FilterController;
 use Http\controllers\NotificationController;
 use Http\controllers\ProfileController;
+use Http\controllers\ReportController;
 use Http\controllers\TaskController;
 use Http\controllers\UserController;
 use Core\App;
@@ -118,6 +119,14 @@ return [
         return new FilterController(
             App::resolve(User::class),
             App::resolve(Task::class)
+        );
+    },
+    ReportController::class => function () {
+        return new ReportController(
+            App::resolve(Stat::class),
+            App::resolve(User::class),
+            App::resolve(Task::class),
+            App::resolve(Request::class)
         );
     },
 ];

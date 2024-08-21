@@ -2,6 +2,7 @@
 
 namespace Core\Repository;
 
+use Exception;
 use Models\Task;
 
 class TaskRepository
@@ -124,5 +125,13 @@ class TaskRepository
         return Task::select('status_id')
             ->where('id', $taskId)
             ->first();
+    }
+
+    public function getTotalTasks() {
+        try {
+            return Task::count();
+        } catch (\Exception $e) {
+            throw new \Exception('Error when executing a database query: ' . $e->getMessage());
+        }
     }
 }

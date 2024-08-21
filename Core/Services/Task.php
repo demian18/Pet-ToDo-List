@@ -87,4 +87,9 @@ class Task
     {
         return $this->taskRepo->get_status_task($taskId);
     }
+
+    public function getTotalTasks()
+    {
+        return $this->taskRepo->getTotalTasks();
+    }
 }

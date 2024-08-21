@@ -2,6 +2,7 @@
 
 namespace Core\Repository;
 
+use Exception;
 use Models\Stat;
 use Models\Task;
 
@@ -40,5 +41,27 @@ class StatRepository
     public function update_stat_cancel($taskId): void
     {
         Stat::where('id', $taskId)->update(['status_id' => 3]);
+    }
+
+    public function getCountByStatus($status_id) {
+        try {
+            if (!in_array($status_id, [1, 3])) {
+                throw new Exception('Invalid parameters');
+            }
+            return Stat::where('status_id', $status_id)->count();
+        } catch (\Exception $e) {
+            throw new \Exception('Error when executing a database query: ' . $e->getMessage());
+        }
+    }
+
+    public function getCountByUser($user_id, $status_id) {
+        try {
+            if (!is_numeric($user_id) || !in_array($status_id, [1, 3])) {
+                throw new Exception('Invalid parameters');
+            }
+            return Stat::where('status_id', $status_id)->where('assignee_id', $user_id)->count();
+        } catch (\Exception $e) {
+            throw new \Exception('Error when executing a database query: ' . $e->getMessage());
+        }
     }
 }

@@ -37,4 +37,14 @@ class Stat
     {
         $this->statRepo->update_stat_cancel($taskId);
     }
+
+    public function getCountByStatus($status_id)
+    {
+        return $this->statRepo->getCountByStatus($status_id);
+    }
+
+    public function getCountByUser($userId, $status_id)
+    {
+        return $this->statRepo->getCountByUser($userId, $status_id);
+    }
 }
