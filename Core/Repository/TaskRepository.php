@@ -134,4 +134,13 @@ class TaskRepository
             throw new \Exception('Error when executing a database query: ' . $e->getMessage());
         }
     }
+
+    public function getTotalTasksInPeriod($start, $end)
+    {
+        try {
+            return Task::whereBetween('timestamp', [$start, $end])->count();
+        } catch (\Exception $e) {
+            throw new \Exception('Error when executing a database query: ' . $e->getMessage());
+        }
+    }
 }

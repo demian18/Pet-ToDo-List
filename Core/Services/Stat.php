@@ -47,4 +47,9 @@ class Stat
     {
         return $this->statRepo->getCountByUser($userId, $status_id);
     }
+
+    public function getCountByStatusInPeriod($status_id, $start, $end)
+    {
+        return $this->statRepo->getCountByStatusInPeriod($status_id, $start, $end);
+    }
 }

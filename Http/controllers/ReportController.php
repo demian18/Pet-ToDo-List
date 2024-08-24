@@ -94,12 +94,48 @@ class ReportController
 
     public function getPerformance()
     {
+        try {
+            $startDate = $this->request->query('start_date');
+            $endDate = $this->request->query('end_date');
 
-        $data = [
-            'average_completion_time' => '2 days',
-            'tasks_per_day' => 10,
-            'best_performance_day' => '2024-08-21'
-        ];
-        echo json_encode($data);
+            if (!$startDate || !$endDate) {
+                throw new Exception('Both start_date and end_date are required.');
+            }
+
+            try {
+                $start = Carbon::createFromFormat('Y-m-d', $startDate);
+                $end = Carbon::createFromFormat('Y-m-d', $endDate);
+            } catch (\Exception $e) {
+                throw new Exception('Invalid date format. Use YYYY-MM-DD.');
+            }
+
+            if ($start->greaterThan($end)) {
+                throw new Exception('Start date cannot be after end date.');
+            }
+
+            $start = Carbon::parse($startDate);
+            $end = Carbon::parse($endDate);
+
+            $totalTasks = $this->taskService->getTotalTasksInPeriod($start, $end);
+            $completedTasks = $this->statService->getCountByStatusInPeriod(1, $start, $end);
+            $canceledTasks = $this->statService->getCountByStatusInPeriod(3, $start, $end);
+
+            $data = [
+                'total_tasks' => $totalTasks,
+                'completed_tasks' => $completedTasks,
+                'canceled_tasks' => $canceledTasks,
+            ];
+
+            $json = json_encode($data);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                throw new Exception('Error encoding JSON: ' . json_last_error_msg());
+            }
+
+            header('Content-Type: application/json');
+            echo $json;
+        } catch (Exception $e) {
+            header('Content-Type: application/json', true, 500);
+            echo json_encode(['error' => $e->getMessage()]);
+        }
     }
 }

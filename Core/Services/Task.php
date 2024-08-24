@@ -92,4 +92,9 @@ class Task
     {
         return $this->taskRepo->getTotalTasks();
     }
+
+    public function getTotalTasksInPeriod($start, $end)
+    {
+        return $this->taskRepo->getTotalTasksInPeriod($start, $end);
+    }
 }

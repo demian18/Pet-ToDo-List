@@ -64,4 +64,16 @@ class StatRepository
             throw new \Exception('Error when executing a database query: ' . $e->getMessage());
         }
     }
+
+    public function getCountByStatusInPeriod($status_id, $start, $end)
+    {
+        try {
+            if (!in_array($status_id, [1, 3])) {
+                throw new Exception('Invalid parameters');
+            }
+            return Stat::whereBetween('timestamp', [$start, $end])->where('status_id', $status_id)->count();
+        } catch (\Exception $e) {
+            throw new \Exception('Error when executing a database query: ' . $e->getMessage());
+        }
+    }
 }
